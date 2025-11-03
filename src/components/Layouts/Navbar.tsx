@@ -1,9 +1,7 @@
 import { Input} from '../Elements/Input'
 import Button from '../Elements/Button'
-import {useEffect, useState} from 'react'
-import {BsSearch} from 'react-icons/bs'
-import { IoIosArrowDropdownCircle } from 'react-icons/io';
-import { BsCart3, BsSuitHeart, BsChevronDown } from 'react-icons/bs';
+import {useState, useContext, createContext} from 'react'
+import { BsCart3, BsSuitHeart, BsChevronDown, BsSearch } from 'react-icons/bs';
 import { FaCircle } from 'react-icons/fa';
 import logo from '../../assets/logo.png'
 

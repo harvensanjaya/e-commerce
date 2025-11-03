@@ -1,7 +1,7 @@
-import FormLogin from "../components/Fragments/FormLogin";
+import FormRegister from "../components/Fragments/FormRegister";
 import Navbar from "../components/Layouts/Navbar";
 
-function Login() {
+function Register() {
     return (
         <div className="flex flex-col h-screen">
             <div>
@@ -9,10 +9,10 @@ function Login() {
             </div>
             
             <div className="flex justify-center items-center h-full">
-                <FormLogin/>
+                <FormRegister/>
             </div>
         </div>
     );
 }
 
-export default Login
+export default Register
