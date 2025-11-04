@@ -11,7 +11,7 @@ const Navbar = () => {
   const {isLogin, isShow} = useNavbar()
 
   return (
-    <div className='flex justify-center h-20 text-black items-center px-10'>
+    <div className='flex justify-center h-20 text-black items-center'>
       {
         isShow ?
           <div className='flex justify-between w-4/5 h-1/2 items-center gap-6'>
