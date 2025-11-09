@@ -1,7 +1,8 @@
 import { ButtonHTMLAttributes, FC} from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  classname?: string
+  classname?: string,
+  logout?: boolean
 }
 
 const Button: FC<ButtonProps> = ({
@@ -9,11 +10,14 @@ const Button: FC<ButtonProps> = ({
   children="...",
   onClick= () => {},
   type="button",
+  logout = false,
   ...rest
 }) => {
   return (
     <button
-      className={`rounded-md h-10 px-3 ${className}`}
+      className={`rounded-md h-10 px-3  hover:bg-slate-700 hover:text-white cursor-pointer ${
+        logout ? "hover:bg-red-600" : "hover:bg-slate-700"
+      } ${className}`}
       type={type}
       onClick={onClick}
       {...rest}

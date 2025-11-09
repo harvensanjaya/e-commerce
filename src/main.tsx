@@ -5,12 +5,10 @@ import './index.css'
 import App from './App.tsx'
 import {NavbarProvider} from './context/NavbarContext'
 
-
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <NavbarProvider>
-      <App />
-    </NavbarProvider>
+      <NavbarProvider>
+        <App />
+      </NavbarProvider>
   </StrictMode>,
 )

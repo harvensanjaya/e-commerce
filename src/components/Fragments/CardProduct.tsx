@@ -1,11 +1,24 @@
-import Button from "../Elements/Button"
+import {BsSuitHeart } from 'react-icons/bs';
 
 function CardProduct(props) {
     const {children} = props
     return (
-        <div className="max-w-sm bg-gray-800 rounded-lg shadow">
+        <div className="max-w-sm rounded-md xl:w-1/6 flex flex-col justify-between">
             {children}
         </div>
+    )
+}
+
+function CardProductEmpty(props) {
+  const {children} = props  
+  return (
+        <a href="" className='max-w-sm rounded-md xl:w-1/7 flex flex-col justify-center bg-slate-200'>
+          <div className="px-5 py-5">
+            <h5 className="text-2xl font-semibold tracking-tight text-black">
+                {children}
+            </h5>
+          </div>
+        </a>
     )
 }
 
@@ -13,7 +26,7 @@ const Header = (props) => {
     const {image} = props
     return (
         <a href="">
-            <img src={image} alt="" className="rounded-t-lg h-70 w-full object-cover object-center"/>
+            <img src={image} alt="" className="rounded-md w-full object-cover object-center"/>
         </a>
     )
 }
@@ -21,12 +34,12 @@ const Header = (props) => {
 const Body = (props) => {
     const {children, title} = props
     return (
-        <div className="px-5 pb-5">
+        <div className="py-5">
             <a href="">
-                <h5 className="text-xl font-semibold tracking-tight text-white">
+                <h5 className="text-xl font-semibold tracking-tight text-black">
                     {title}
                 </h5>
-                <p className="text-xs text-white">
+                <p className="text-xs text-black">
                     {children}
                 </p>
             </a>
@@ -37,11 +50,15 @@ const Body = (props) => {
 const Footer = (props) => {
     const {price} = props
     return (
-        <div className="flex flex-col justify-between px-5 pb-5">
-            <span className="text-xl font-bold text-white">{price}</span>
-            <Button className='bg-slate-500 text-white w-full'>
-                Add to Cart
-            </Button>
+        <div className="flex flex-col justify-between pb-5">
+            <span className="text-md text-black">{price}</span>
+            <div className='flex justify-between'>
+              <p>8 / M</p>
+              <div className='flex items-center'>
+                <BsSuitHeart size={15} color='black'/>
+                <p className='ml-1 text-black'>12</p>
+              </div>
+            </div>
         </div>
     )
 }
@@ -50,4 +67,4 @@ CardProduct.Header = Header
 CardProduct.Body = Body
 CardProduct.Footer = Footer
 
-export default CardProduct
+export {CardProduct, CardProductEmpty}
