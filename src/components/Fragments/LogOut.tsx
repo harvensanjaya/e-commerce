@@ -1,25 +1,59 @@
-import { HiMiniXMark } from 'react-icons/hi2';
-import Button from '../Elements/Button';
+import { AnimatePresence, motion } from "motion/react";
+import { HiMiniXMark } from "react-icons/hi2";
+import Button from "../Elements/Button";
 
-function Logout() {
-  return (
-    <div className='absolute right-[50%] top-5 translate-y-1/4 mt-2 w-[280%] bg-white border border-slate-300 rounded-md shadow-lg z-10 box-content'>
-      <div className='flex flex-col gap-2 py-4 px-6'>
-        <div className='flex justify-between items-center mb-2'>
-          <h1 className='font-semibold text-xl'>Logout</h1>
-          <HiMiniXMark size={25}/>
-        </div>
-        <p className='text-md text-slate-600'>Are you sure want to logout from vintage?</p>
-      </div>
-      <div className='flex items-center justify-between w-full bg-gray-100 py-2 px-6'>
-        <span></span>
-        <div className='flex gap-2 w-1/2'>
-          <Button className='bg-slate-500 text-white w-full'>Close</Button>
-          <Button className='bg-red-500 text-white w-full p=2'>Log Out</Button>
-        </div>
-      </div>
-    </div>
-  )
+interface LogoutProps {
+  onClose: () => void;
+  onConfirm: () => void;
+  isOpen?: boolean;
 }
 
-export default Logout
+function Logout({ onClose, onConfirm, isOpen = true }: LogoutProps) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 flex items-center justify-center bg-black/60 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.13 }}
+        >
+          <motion.div
+            className="bg-white rounded-xl shadow-lg sm:w-[400px] w-[300px] overflow-hidden transition-all transition-discrete"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            transition={{ duration: 0.35, ease: [0.25, 1, 0.25, 1] }}
+          >
+            <div className="flex justify-between items-center px-6 sm:pt-6 pt-4 transition-all">
+              <h1 className="font-medium sm:text-xl text-lg transition-all">
+                Logout
+              </h1>
+              <button onClick={onClose} className="cursor-pointer">
+                <HiMiniXMark size={25} />
+              </button>
+            </div>
+
+            <div className="p-6 text-slate-600 transition-all">
+              <p className="sm:text-md text-sm transition-all">
+                Are you sure you want to logout from Vintage?
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-2 bg-gray-100 px-6 py-3">
+              <Button className="bg-gray-200 text-black" onClick={onClose}>
+                Close
+              </Button>
+              <Button className="bg-red-500 text-white" onClick={onConfirm}>
+                Log Out
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export default Logout;
