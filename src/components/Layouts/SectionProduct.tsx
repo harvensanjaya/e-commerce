@@ -3,12 +3,12 @@ import { CardProduct, CardProductEmpty } from "../Fragments/CardProduct";
 
 interface SectionProductProps {
   readonly title: string;
-  readonly className: string;
   readonly products: Product[];
 }
-function SectionProduct({ title, className, products }: SectionProductProps) {
+
+function SectionProduct({ title, products }: SectionProductProps) {
   return (
-    <div className={`flex flex-col gap-2 py-5 items-center ${className}`}>
+    <div className={`flex flex-col gap-2 py-5 items-center `}>
       <div className="flex w-4/5 mt-10 mb-5 self-center justify-between items-center">
         <h1 className="text-3xl font-medium">{title}</h1>
 

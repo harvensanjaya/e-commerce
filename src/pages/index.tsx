@@ -13,7 +13,7 @@ import type { Product } from "../types/product";
 const Home = () => {
   const { setIsShow, setIsLogin } = useNavbar();
 
-  const [products, setProducts] = useState<Product[]>();
+  const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
@@ -25,6 +25,7 @@ const Home = () => {
       try {
         const res = await getAllProducts();
         setProducts(res);
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
