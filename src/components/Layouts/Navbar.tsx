@@ -10,9 +10,19 @@ import Logout from "../Fragments/LogOut";
 import ProfileDropdown from "../Fragments/ProfileDropdown";
 
 const Navbar = () => {
-  const { isLogin, isShow } = useNavbar();
+  const { isLogin, isShow, setIsLogin } = useNavbar();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const login = () => {
+    window.location.href = "/login";
+    setIsLogin(true);
+  };
+
+  const register = () => {
+    window.location.href = "/register";
+    setIsLogin(true);
+  };
 
   return (
     <div className="flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
@@ -82,11 +92,17 @@ const Navbar = () => {
           ) : (
             <div className="flex gap-7 h-full items-center justify-between">
               <div className="flex items-center h-full justify-between gap-5 ">
-                <Button className="bg-slate-100 border border-slate-500 text-slate-500 text-sm">
+                <Button
+                  className="bg-slate-100 border border-slate-500 text-slate-500 text-sm"
+                  onClick={() => login()}
+                >
                   Login
                 </Button>
 
-                <Button className="bg-slate-500 text-white text-sm">
+                <Button
+                  className="bg-slate-500 text-white text-sm"
+                  onClick={() => register()}
+                >
                   Register
                 </Button>
               </div>

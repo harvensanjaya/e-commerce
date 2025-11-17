@@ -8,21 +8,29 @@ import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
+import type { Product } from "../types/product";
 
 const Home = () => {
   const { setIsShow, setIsLogin } = useNavbar();
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>();
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     setIsShow(true);
-    setIsLogin(true);
   }, []);
 
   useEffect(() => {
-    getAllProducts().then((res) => console.log(res));
-  });
+    const fetchProducts = async () => {
+      try {
+        const res = await getAllProducts();
+        setProducts(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <div className="">
@@ -37,7 +45,7 @@ const Home = () => {
               type="text"
               placeholder="Search for items"
               name="search"
-              className="border-0 text-lg"
+              className="border-0 sm:text-lg text-sm"
             />
           </div>
         </div>
@@ -57,7 +65,7 @@ const Home = () => {
         </div>
       </div>
 
-      <SectionProduct title="Popular Items" />
+      <SectionProduct title="Popular Items" products={products} />
 
       <div className="flex flex-col gap-2 py-5 items-center">
         <div className="flex w-4/5 self-center">
@@ -83,7 +91,7 @@ const Home = () => {
         </div>
       </div>
 
-      <SectionProduct title="New Product" />
+      <SectionProduct title="New Product" products={products} />
       <Footer />
     </div>
   );
