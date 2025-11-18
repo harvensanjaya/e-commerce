@@ -3,7 +3,7 @@ import { BsSuitHeart } from "react-icons/bs";
 function CardProduct(props) {
   const { children } = props;
   return (
-    <div className="max-w-sm rounded-md xl:w-1/6 flex flex-col justify-between">
+    <div className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2">
       {children}
     </div>
   );
@@ -14,7 +14,7 @@ function CardProductEmpty(props) {
   return (
     <a
       href=""
-      className="max-w-sm rounded-md xl:w-1/7 flex flex-col justify-center bg-slate-200"
+      className="max-w-sm rounded-md flex flex-col justify-center bg-slate-200"
     >
       <div className="px-5 py-5">
         <h5 className="text-2xl font-semibold tracking-tight text-black">
@@ -28,11 +28,11 @@ function CardProductEmpty(props) {
 const Header = (props) => {
   const { image } = props;
   return (
-    <a href="">
+    <a href="" className="">
       <img
         src={image}
         alt=""
-        className="rounded-md w-full object-cover object-center"
+        className="rounded-md object-cover object-center sm:h-60 h-40 aspect-square"
       />
     </a>
   );
@@ -41,7 +41,7 @@ const Header = (props) => {
 const Body = (props) => {
   const { children, title } = props;
   return (
-    <div className="py-5">
+    <div className="">
       <a href="">
         <h5 className="text-xl font-semibold tracking-tight text-black">
           {title}
@@ -55,7 +55,7 @@ const Body = (props) => {
 const Footer = (props) => {
   const { price } = props;
   return (
-    <div className="flex flex-col justify-between pb-5">
+    <div className="flex flex-col justify-between">
       <span className="text-md text-black">{price}</span>
       <div className="flex justify-between">
         <p>8 / M</p>

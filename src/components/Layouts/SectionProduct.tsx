@@ -1,5 +1,9 @@
 import type { Product } from "../../types/product";
 import { CardProduct, CardProductEmpty } from "../Fragments/CardProduct";
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { fetchProducts } from '../../store/productSlice'
+import { useEffect } from "react";
+import { selectAllProducts } from "../../slices/productSelectors";
 
 interface SectionProductProps {
   readonly title: string;
@@ -15,7 +19,7 @@ function SectionProduct({ title, products }: SectionProductProps) {
         <p className="text-slate-500 text-lg">See All</p>
       </div>
 
-      <div className="xl:flex xl:gap-5 gap-5 w-4/5 xl:flex-nowrap grid lg:grid-cols-3 grid-cols-2 transition-all">
+      <div className="xl:flex xl:gap-5 gap-5 w-4/5 grid lg:grid-cols-3 grid-cols-2 transition-all">
         {products.length > 0 &&
           products.slice(0, 5).map((product) => (
             <CardProduct key={product.id}>

@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavbar } from "../context/NavbarContext";
-import { getAllProducts } from "../services/product.service";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchProducts } from "../store/productSlice";
 
 import Button from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
-import type { Product } from "../types/product";
 
 const Home = () => {
   const { setIsShow, setIsLogin } = useNavbar();
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const dispatch = useAppDispatch();
+  const { items: products, loading, error } = useAppSelector(
+    (state) => state.product
+  );
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
@@ -21,17 +24,24 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await getAllProducts();
-        setProducts(res);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchProducts();
-  }, []);
+    dispatch(fetchProducts()); // 🔥 Ambil dari Redux
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center mt-20 text-xl">
+        Loading products...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center mt-20 text-red-500 text-xl">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="">
