@@ -9,18 +9,29 @@ import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
+import { getUser } from "../services/auth.service";
 
 const Home = () => {
   const { setIsShow, setIsLogin } = useNavbar();
+  const [user, setUser] = useState({});
 
   const dispatch = useAppDispatch();
-  const { items: products, loading, error } = useAppSelector(
-    (state) => state.product
-  );
+  const {
+    items: products,
+    loading,
+    error,
+  } = useAppSelector((state) => state.product);
+
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     setIsShow(true);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser(getUser(token));
+    } else {
+      window.location.href = "/login";
+    }
   }, []);
 
   useEffect(() => {

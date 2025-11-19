@@ -10,31 +10,25 @@ import Logout from "../Fragments/LogOut";
 import ProfileDropdown from "../Fragments/ProfileDropdown";
 
 const Navbar = () => {
-  const { isLogin, isShow, setIsLogin } = useNavbar();
+  const { isShow } = useNavbar();
+
+  const [token, setToken] = useState<string | null>(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const login = () => {
-    window.location.href = "/login";
-    setIsLogin(true);
-  };
-
-  const register = () => {
-    window.location.href = "/register";
-    setIsLogin(true);
-  };
-  
-  const handleLogout = () => {
-    localStorage.removeItem("isLogin");
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
-    window.location.href = "/login";
-    setIsLogin(false);
-  };
-
   useEffect(() => {
-    setIsLogin(localStorage.getItem("isLogin") === "true");
+    setToken(localStorage.getItem("token"));
   }, []);
+
+  const goLogin = () => (window.location.href = "/login");
+
+  const goRegister = () => (window.location.href = "/register");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    window.location.href = "/";
+  };
 
   return (
     <div className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
@@ -51,7 +45,7 @@ const Navbar = () => {
               className="border-0 sm:text-base text-sm"
             />
           </div>
-          {isLogin ? (
+          {token ? (
             <div className="flex gap-7 items-center h-full justify-between">
               <div className="flex items-center h-full justify-between ">
                 <div className="relative h-full items-center sm:flex hidden">
@@ -106,14 +100,14 @@ const Navbar = () => {
               <div className="flex items-center h-full justify-between gap-5 ">
                 <Button
                   className="bg-slate-100 border border-slate-500 text-slate-500 text-sm"
-                  onClick={() => login()}
+                  onClick={() => goLogin()}
                 >
                   Login
                 </Button>
 
                 <Button
                   className="bg-slate-500 text-white text-sm"
-                  onClick={() => register()}
+                  onClick={() => goRegister()}
                 >
                   Register
                 </Button>

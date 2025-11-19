@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
 import Home from "./pages";
 import CartPage from "./pages/Cart";
@@ -11,41 +12,55 @@ import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
+  { path: "/", element: <Home /> },
+
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+
   {
     path: "/products",
     element: <Products />,
   },
   {
     path: "/product",
-    element: <DetailProduct />,
+    element: (
+      <ProtectedRoute>
+        <DetailProduct />
+      </ProtectedRoute>
+    ),
   },
+
   {
     path: "/cart",
-    element: <CartPage />,
+    element: (
+      <ProtectedRoute>
+        <CartPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/order",
-    element: <OrderPage />,
+    element: (
+      <ProtectedRoute>
+        <OrderPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/profile",
-    element: <ProfilePage />,
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/wishlist",
-    element: <Wishlist />,
+    element: (
+      <ProtectedRoute>
+        <Wishlist />
+      </ProtectedRoute>
+    ),
   },
 ]);
 

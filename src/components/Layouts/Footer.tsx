@@ -5,7 +5,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 
 function Footer() {
   return (
-    <div className="bg-slate-600 text-white flex flex-col items-center py-10 sm:mt-50 mt-30 transition-all transition-discrete">
+    <div className="bg-slate-600 text-white flex flex-col items-center py-10 sm:mt-50 mt-30 transition-all transition-discrete font-poppins">
       <div className="flex md:flex-row flex-col gap-10 justify-between w-4/5 sm:py-10 py-5 transition-all transition-discrete">
         <div className="w-1/4 flex flex-col md:gap-5 sm:gap-3 gap-2 transition-all transition-discrete">
           <h1 className="md:text-2xl font-semibold sm:text-xl text-lg transition-all transition-discrete">
