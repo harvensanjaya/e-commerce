@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCart3, BsChevronDown, BsSearch, BsSuitHeart } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa";
 import { useNavbar } from "../../context/NavbarContext";
@@ -23,9 +23,21 @@ const Navbar = () => {
     window.location.href = "/register";
     setIsLogin(true);
   };
+  
+  const handleLogout = () => {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    window.location.href = "/login";
+    setIsLogin(false);
+  };
+
+  useEffect(() => {
+    setIsLogin(localStorage.getItem("isLogin") === "true");
+  }, []);
 
   return (
-    <div className="flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
+    <div className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
       {isShow ? (
         <div className="flex justify-between w-4/5 sm:h-1/2 h-2/5 items-center gap-6 transition-all transition-discrete">
           <img src={logo} alt="" className="h-full" />
@@ -126,10 +138,7 @@ const Navbar = () => {
       <Logout
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
-        onConfirm={() => {
-          console.log("logout");
-          setShowLogoutModal(false);
-        }}
+        onConfirm={() => handleLogout()}
       />
     </div>
   );

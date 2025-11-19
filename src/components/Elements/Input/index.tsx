@@ -16,7 +16,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     <div className="relative w-full">
       <input
         type={actualType}
-        className={`border rounded w-full py-2 text-slate-700 focus:outline-none p-2 ${className}`}
+        className={`font-poppins border rounded w-full py-2 text-slate-700 focus-within:outline-2 focus-within:outline-slate-600 p-2 ${className}`}
         placeholder={placeholder}
         name={name}
         id={name}
@@ -43,42 +43,36 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 // agar tidak error saat hot reload (React DevTools warning fix)
 Input.displayName = "Input";
 
-interface InputFromProps {
+interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  type?: string;
-  placeholder?: string;
-  className?: string;
   labelClassName?: string;
-  value?: string;
 }
 
-function InputForm({
-  label,
-  name,
-  type = "text",
-  placeholder,
-  className,
-  labelClassName,
-  value,
-}: InputFromProps) {
-  return (
-    <div className="mb-6">
-      <label
-        htmlFor={name}
-        className={`block font-medium text-slate-700 ${labelClassName}`}
-      >
-        {label}
-      </label>
-      <Input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        className={className}
-        value={value}
-      />
-    </div>
-  );
-}
+const InputForm = forwardRef<HTMLInputElement, InputFormProps>(
+  ({ label, name, type = "text", placeholder, className, labelClassName, value, ...rest }, ref) => {
+    return (
+      <div className="mb-6">
+        <label
+          htmlFor={name}
+          className={`font-poppins block font-medium text-slate-700 ${labelClassName}`}
+        >
+          {label}
+        </label>
+        <Input
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          className={className}
+          value={value}
+          ref={ref}
+          {...rest}
+        />
+      </div>
+    );
+  }
+);
+
+InputForm.displayName = "InputForm";
 
 export { Input, InputForm };

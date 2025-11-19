@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FC } from "react";
+import type { ButtonHTMLAttributes, FC } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   classname?: string;
@@ -15,7 +15,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`transition-all transition-discrete text-sm sm:text-md rounded-md h-10 px-3  hover:bg-slate-700 hover:text-white cursor-pointer ${
+      className={`font-poppins transition-all transition-discrete text-sm sm:text-md rounded-md h-10 px-3  hover:bg-slate-700 hover:text-white cursor-pointer ${
         logout ? "hover:bg-red-600" : "hover:bg-slate-700"
       } ${className}`}
       type={type}
