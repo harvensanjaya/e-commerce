@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavbar } from "../../context/NavbarContext";
-import { login } from "../../services/auth.service";
+import { use, useEffect, useRef } from "react";
 import Button from "../Elements/Button";
 import { InputForm } from "../Elements/Input";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { loginThunk } from "../../redux/auth/authThunks";
+import { Link } from "react-router-dom";
+import { showModal, hideModal } from "../../redux/auth/modalSlice";
+import {useNavigate} from 'react-router-dom'
 
 function FormLogin() {
-  const { setIsLogin } = useNavbar();
-  const [loginFailed, setLoginFailed] = useState("");
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const {loading, error, isAuthenticated} = useAppSelector((state) => state.auth);
   const usernameRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,21 +19,15 @@ function FormLogin() {
     const username = e.currentTarget.username.value;
     const password = e.currentTarget.password.value;
 
-    await login(username, password, (success, token, res) => {
-      if (success) {
-        localStorage.setItem("token", token);
-        window.location.href = "/";
-      } else {
-        const message = res?.data || "Login failed.";
-        setLoginFailed(message);
-        console.log("Login error:", message);
-      }
-    });
+    dispatch(loginThunk({ username, password }))
   };
 
   useEffect(() => {
     usernameRef.current?.focus();
-  });
+    if (isAuthenticated) {
+    navigate("/");
+  }
+  }, [isAuthenticated]);
 
   return (
     <div className="flex flex-col p-10 sm:shadow-[0px_10px_15px_3px_rgba(0,0,0,0.1)] rounded-md w-125 transition-all transition-discrete">
@@ -51,18 +49,17 @@ function FormLogin() {
           type="password"
           placeholder="Enter your password"
         />
-        {loginFailed && (
-          <p className="text-red-600 font-poppins text-sm text-center">
-            *{loginFailed}*
-          </p>
+        {error && (
+          <p className="text-red-600 text-sm text-center mt-2 font-poppins">*{error}*</p>
         )}
         <Button
           className="bg-slate-500 text-white w-full mt-5"
           type="submit"
           onClick={() => handleLogin}
         >
-          Continue
+          {loading ? "Loading..." : "Continue"}
         </Button>
+        <p className="text-sm text-center mt-5 font-poppins">Don't have an account? <Link to="/register" className="text-slate-500">Sign Up</Link></p>
       </form>
     </div>
   );

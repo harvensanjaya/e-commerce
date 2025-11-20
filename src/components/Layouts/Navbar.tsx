@@ -42,7 +42,7 @@ const Navbar = () => {
               type="text"
               placeholder="Search for items"
               name="search"
-              className="border-0 sm:text-base text-sm"
+              className="border-0 sm:text-base text-sm focus:border-0 focus:outline-0 transition-all transition-discrete"
             />
           </div>
           {token ? (

@@ -1,37 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { fetchProducts } from "../store/productSlice";
+import { fetchProducts } from "../redux/product/productSlice";
 
 import Button from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
-import { getUser } from "../services/auth.service";
+import { showModal, hideModal } from "../redux/auth/modalSlice";
 
 const Home = () => {
-  const { setIsShow, setIsLogin } = useNavbar();
-  const [user, setUser] = useState({});
-
+  const { setIsShow } = useNavbar();
   const dispatch = useAppDispatch();
+  const { user, justLoggedIn } = useAppSelector((state) => state.auth);
+
   const {
     items: products,
     loading,
     error,
   } = useAppSelector((state) => state.product);
 
-  const [cart, setCart] = useState([]);
+  const goLogin = () => (window.location.href = "/login");
+
+  useEffect(() => {
+  if (justLoggedIn && user) {
+    dispatch(showModal(`Authenticated as ${user.user}`));
+
+    setTimeout(() => {
+      dispatch(hideModal());
+    }, 2500);
+
+    // reset flag supaya tidak muncul lagi
+    dispatch({ type: "auth/clearLoginState" });
+  }
+}, [justLoggedIn]);
 
   useEffect(() => {
     setIsShow(true);
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUser(getUser(token));
-    } else {
-      window.location.href = "/login";
-    }
   }, []);
 
   useEffect(() => {
@@ -55,7 +62,7 @@ const Home = () => {
   }
 
   return (
-    <div className="">
+    <div className="font-poppins">
       <Navbar />
 
       <div className="flex lg:hidden flex-col gap-2 py-5 items-center mt-20 transition-all">
@@ -83,7 +90,7 @@ const Home = () => {
           <h1 className="lg:text-4xl md:text-3xl mb-5 text-left transition-all">
             Ready to declutter you closet?
           </h1>
-          <Button className="bg-slate-500 text-white w-full">Shop Now</Button>
+          <Button className="bg-slate-500 text-white w-full" onClick={() => goLogin()}>Shop Now</Button>
         </div>
       </div>
 
@@ -95,6 +102,12 @@ const Home = () => {
         </div>
 
         <div className="flex gap-5 w-4/5 flex-wrap">
+          {products.length > 0 &&
+            products.slice(0, 5).map((product) => (
+              <Button key={product.id} className="bg-white border border-black">
+                {product.category}
+              </Button>
+          ))}
           <Button className="bg-white border border-black w-auto">Vans</Button>
           <Button className="bg-white border border-black">Bohoo</Button>
           <Button className="bg-white border border-black">Mango</Button>

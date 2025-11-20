@@ -10,6 +10,7 @@ import Products from "./pages/Products";
 import ProfilePage from "./pages/Profile";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
+import AuthToast from "./components/Fragments/AuthToast";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -65,7 +66,12 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <AuthToast /> 
+      <RouterProvider router={router} />
+    </>
+  );
 };
 
 export default App;

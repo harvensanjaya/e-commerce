@@ -18,7 +18,7 @@ function ProfileDropdown({ onLogoutClick }: ProfileDropdownProps) {
         className="absolute right-[50%] top-7 translate-y-1/4 mt-2 w-auto bg-white rounded-md shadow-lg z-10 box-content overflow-hidden"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 100 }}
+        exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.35, ease: [0.25, 1, 0.25, 1] }}
       >
         <Button className="bg-auto flex items-center whitespace-nowrap w-full rounded-none pr-20">

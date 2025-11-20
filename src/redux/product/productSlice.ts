@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import { getAllProducts} from '../services/product.service'
-import type { Product } from '../types/product'
+import { getAllProducts } from '../../services/product.service'
+import type { Product } from '../../types/product'
 
 interface ProductState {
     items: Product[];
@@ -23,7 +23,9 @@ export const fetchProducts = createAsyncThunk(
 
     // ⏳ CACHE (5 menit)
     const now = Date.now();
-    if (state.product.lastFetch && now - state.product.lastFetch < 5 * 60 * 1000) {
+    const CACHE_DURATION = 5 * 60 * 1000;
+
+    if (state.product.lastFetch && now - state.product.lastFetch < CACHE_DURATION) {
       return state.product.items; // pakai cache
     }
 

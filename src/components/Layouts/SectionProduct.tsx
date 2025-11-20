@@ -1,9 +1,5 @@
 import type { Product } from "../../types/product";
 import { CardProduct, CardProductEmpty } from "../Fragments/CardProduct";
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { fetchProducts } from '../../store/productSlice'
-import { useEffect } from "react";
-import { selectAllProducts } from "../../slices/productSelectors";
 
 interface SectionProductProps {
   readonly title: string;
