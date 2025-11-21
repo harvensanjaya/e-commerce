@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BsCart3, BsChevronDown, BsSearch, BsSuitHeart } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa";
 import { useNavbar } from "../../context/NavbarContext";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 import logo from "../../assets/logo.png";
 import Button from "../Elements/Button";
@@ -12,6 +13,7 @@ import ProfileDropdown from "../Fragments/ProfileDropdown";
 
 const Navbar = () => {
   const { isShow } = useNavbar();
+  const wishlistCount = useAppSelector((state) => state.wishlist.items.length);
 
   const [token, setToken] = useState<string | null>(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -35,7 +37,9 @@ const Navbar = () => {
     <div className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
       {isShow ? (
         <div className="flex justify-between w-4/5 sm:h-1/2 h-2/5 items-center gap-6 transition-all transition-discrete">
-          <Link to={'/'} className="h-full"><img src={logo} alt="" className="h-full" /></Link>
+          <Link to={"/"} className="h-full">
+            <img src={logo} alt="" className="h-full" />
+          </Link>
 
           <div className="hidden lg:flex bg-slate-100 rounded-xl border border-slate-400 items-center grow px-3 gap-3 w-2/4 transition-all transition-discrete">
             <BsSearch />
@@ -59,15 +63,20 @@ const Navbar = () => {
                   <p className="absolute top-1 right-2 text-white text-xs">1</p>
                 </div>
 
-                <div className="relative h-full items-center sm:flex hidden">
+                <Link
+                  className="relative h-full items-center sm:flex hidden"
+                  to={"/wishlist"}
+                >
                   <BsSuitHeart size={28} className="p-2 box-content" />
                   <FaCircle
                     size={22}
                     className="absolute top-0 right-0"
                     color="red"
                   />
-                  <p className="absolute top-1 right-2 text-white text-xs">1</p>
-                </div>
+                  <p className="absolute top-1 right-2 text-white text-xs">
+                    {wishlistCount}
+                  </p>
+                </Link>
               </div>
 
               <div className="flex items-center justify-between h-full gap-3 relative">
@@ -122,7 +131,9 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="flex justify-between w-4/5 sm:h-1/2 h-2/5 items-center gap-6 transition-all">
-          <img src={logo} alt="" className="h-full" />
+          <Link to={"/"} className="h-full">
+            <img src={logo} alt="" className="h-full" />
+          </Link>
           <div className="flex items-center gap-2 border-slate-300 pl-5">
             <p className="sm:text-lg text-sm transition-all">EN</p>
             <BsChevronDown size={12} />

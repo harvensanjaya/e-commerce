@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { BsSearch } from "react-icons/bs";
-import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { fetchProducts } from "../redux/product/productSlice";
+import { useNavbar } from '../context/NavbarContext'
 
 import Button from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
@@ -10,10 +9,11 @@ import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
 import { hideModal, showModal } from "../redux/auth/modalSlice";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const { setIsShow } = useNavbar();
   const dispatch = useAppDispatch();
+  const {setIsShow} = useNavbar()
   const { user, justLoggedIn } = useAppSelector((state) => state.auth);
 
   const {
@@ -45,12 +45,8 @@ const Home = () => {
   }, [justLoggedIn]);
 
   useEffect(() => {
-    setIsShow(true);
-  }, []);
-
-  useEffect(() => {
-    dispatch(fetchProducts()); // 🔥 Ambil dari Redux
-  }, [dispatch]);
+    setIsShow(true)
+  }, [])
 
   if (loading) {
     return (
@@ -117,13 +113,13 @@ const Home = () => {
           {categories.map((category) => {
             const slug = toSlug(category);
             return (
-              <Button
+              <Link
                 key={category}
-                className="bg-white border border-black"
-                onClick={() => (window.location.href = `/products/${slug}`)}
+                className="bg-white border border-black p-2 rounded-lg text-sm hover:bg-slate-700 hover:text-white transition-all transition-discrete"
+                to={`/products/${slug}`}
               >
                 {category}
-              </Button>
+              </Link>
             );
           })}
         </div>

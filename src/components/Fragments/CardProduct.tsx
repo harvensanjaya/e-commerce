@@ -1,12 +1,15 @@
 import type React from "react";
 import type { ReactNode } from "react";
-import { BsSuitHeart } from "react-icons/bs";
+import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { toggleWishlist } from "../../redux/wishlist/wishlistSlice";
+import { useDispatch, useSelector } from "react-redux";
+import type { Product } from "../../types/product";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 // interfaces
 interface CardProductProps {
   children: ReactNode;
-  to: string;
 }
 
 interface CardProductEmptyProps {
@@ -16,33 +19,36 @@ interface CardProductEmptyProps {
 
 interface HeaderProps {
   image: string;
+  to: string;
 }
 
 interface BodyProps {
   title: string;
   children: ReactNode;
+  to: string;
 }
 
 interface FooterProps {
   price: string | number;
+  product: Product;
 }
 
 const CardProduct: React.FC<CardProductProps> & {
   Header: React.FC<HeaderProps>;
   Body: React.FC<BodyProps>;
   Footer: React.FC<FooterProps>;
-} = ({ children, to }) => {
+} = ({ children }) => {
   return (
-    <Link
-      to={to}
-      className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2 font-poppins justify-between"
-    >
+    <div className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2 font-poppins justify-between">
       {children}
-    </Link>
+    </div>
   );
 };
 
-const CardProductEmpty: React.FC<CardProductEmptyProps> = ({ children,to }) => {
+const CardProductEmpty: React.FC<CardProductEmptyProps> = ({
+  children,
+  to,
+}) => {
   return (
     <Link
       to={to}
@@ -57,35 +63,47 @@ const CardProductEmpty: React.FC<CardProductEmptyProps> = ({ children,to }) => {
   );
 };
 
-const Header: React.FC<HeaderProps> = ({ image }) => {
+const Header: React.FC<HeaderProps> = ({ image, to }) => {
   return (
-    <img
-      src={image}
-      alt=""
-      className="rounded-md object-cover object-center sm:h-60 h-40 aspect-square"
-    />
+    <Link to={to}>
+      <img
+        src={image}
+        alt=""
+        className="rounded-md object-cover object-center sm:h-60 h-40 aspect-square"
+      />
+    </Link>
   );
 };
 
-const Body: React.FC<BodyProps> = ({ title, children }) => {
+const Body: React.FC<BodyProps> = ({ title, children, to }) => {
   return (
-    <div className="">
+    <Link className="" to={to}>
       <h5 className="text-xl font-semibold tracking-tight text-black">
         {title}
       </h5>
       <p className="text-xs text-black">{children}</p>
-    </div>
+    </Link>
   );
 };
 
-const Footer: React.FC<FooterProps> = ({ price }) => {
+const Footer: React.FC<FooterProps> = ({ price, product }) => {
+  const dispatch = useDispatch();
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const exists = wishlistItems.some((i) => i.id === product.id);
+
   return (
     <div className="flex flex-col justify-between">
       <span className="text-md text-black">{price}</span>
       <div className="flex justify-between">
         <p>8 / M</p>
         <div className="flex items-center">
-          <BsSuitHeart size={15} color="black" />
+          <button onClick={() => dispatch(toggleWishlist(product))}>
+            {exists ? (
+              <BsSuitHeartFill size={15} color="red" />
+            ) : (
+              <BsSuitHeart size={15} color="black" />
+            )}
+          </button>
           <p className="ml-1 text-black">12</p>
         </div>
       </div>

@@ -8,8 +8,9 @@ import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 
 const Products = () => {
-  const { setIsShow } = useNavbar();
   const { title } = useParams();
+  const { setIsShow} = useNavbar()
+  const isAll = location.pathname.startsWith("/products/all/")
   const { items: products } = useAppSelector((state) => state.product);
 
   const toSlug = (str: string) =>
@@ -20,22 +21,15 @@ const Products = () => {
 
   const fromSlug = (slug: string) => slug.replaceAll("-", " ");
 
-  const filtered = title
-    ? products.filter((p) => toSlug(p.category) === title)
-    : products;
+  const filtered = isAll ? products : products.filter((p) => toSlug(p.category) === title)
 
   const readableTitle = fromSlug(title || "").replaceAll(/\b\w/g, (c) =>
     c.toUpperCase()
   );
 
   useEffect(() => {
-    setIsShow(true);
-    console.log("TITLE:", title);
-    console.log(
-      "FILTER RESULT:",
-      products.filter((p) => p.category)
-    );
-  }, [title, products]);
+    setIsShow(true)
+  }, [])
 
   return (
     <div className="flex flex-col">

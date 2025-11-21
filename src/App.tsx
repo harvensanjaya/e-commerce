@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useAppDispatch } from "./hooks/reduxHooks";
+import { fetchProducts } from "./redux/product/productSlice";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthToast from "./components/Fragments/AuthToast";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -11,22 +14,57 @@ import Products from "./pages/Products";
 import ProfilePage from "./pages/Profile";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
+import RootLayout from "./components/Layouts/RootLayout";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Home /> },
-
-  { path: "/login", element: <Login /> },
-  { path: "/register", element: <Register /> },
+  {
+    path: "/",
+    element: (
+      <RootLayout>
+        <Home />
+      </RootLayout>
+    ),
+  },
 
   {
+    path: "/login",
+    element: (
+      <RootLayout>
+        <Login />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <RootLayout>
+        <Register />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/products/all/:title",
+    element: (
+      <RootLayout>
+        <Products />
+      </RootLayout>
+    ),
+  },
+  {
     path: "/products/:title",
-    element: <Products />,
+    element: (
+      <RootLayout>
+        <Products />
+      </RootLayout>
+    ),
   },
   {
     path: "/product/:id",
     element: (
       <ProtectedRoute>
-        <DetailProduct />
+        <RootLayout>
+          <DetailProduct />
+        </RootLayout>
       </ProtectedRoute>
     ),
   },
@@ -35,7 +73,9 @@ const router = createBrowserRouter([
     path: "/cart",
     element: (
       <ProtectedRoute>
-        <CartPage />
+        <RootLayout>
+          <CartPage />
+        </RootLayout>
       </ProtectedRoute>
     ),
   },
@@ -43,7 +83,9 @@ const router = createBrowserRouter([
     path: "/order",
     element: (
       <ProtectedRoute>
-        <OrderPage />
+        <RootLayout>
+          <OrderPage />
+        </RootLayout>
       </ProtectedRoute>
     ),
   },
@@ -51,7 +93,9 @@ const router = createBrowserRouter([
     path: "/profile",
     element: (
       <ProtectedRoute>
-        <ProfilePage />
+        <RootLayout>
+          <ProfilePage />
+        </RootLayout>
       </ProtectedRoute>
     ),
   },
@@ -59,13 +103,21 @@ const router = createBrowserRouter([
     path: "/wishlist",
     element: (
       <ProtectedRoute>
-        <Wishlist />
+        <RootLayout>
+          <Wishlist />
+        </RootLayout>
       </ProtectedRoute>
     ),
   },
 ]);
 
 const App = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
   return (
     <>
       <AuthToast />
