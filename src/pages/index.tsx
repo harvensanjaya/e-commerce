@@ -1,4 +1,4 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
@@ -9,7 +9,7 @@ import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
-import { showModal, hideModal } from "../redux/auth/modalSlice";
+import { hideModal, showModal } from "../redux/auth/modalSlice";
 
 const Home = () => {
   const { setIsShow } = useNavbar();
@@ -21,22 +21,28 @@ const Home = () => {
     loading,
     error,
   } = useAppSelector((state) => state.product);
-  const categories = [...new Set(products.map((p) => p.category))]
+  const categories = [...new Set(products.map((p) => p.category))];
+
+  const toSlug = (str: string) =>
+    str
+      .toLowerCase()
+      .replaceAll(/[^a-z0-9]+/g, "-") // convert spaces & symbols → "-"
+      .replaceAll(/^-+|-+$/g, "");
 
   const goLogin = () => (window.location.href = "/login");
 
   useEffect(() => {
-  if (justLoggedIn && user) {
-    dispatch(showModal(`Authenticated as ${user.user}`));
+    if (justLoggedIn && user) {
+      dispatch(showModal(`Authenticated as ${user.user}`));
 
-    setTimeout(() => {
-      dispatch(hideModal());
-    }, 2500);
+      setTimeout(() => {
+        dispatch(hideModal());
+      }, 2500);
 
-    // reset flag supaya tidak muncul lagi
-    dispatch({ type: "auth/clearLoginState" });
-  }
-}, [justLoggedIn]);
+      // reset flag supaya tidak muncul lagi
+      dispatch({ type: "auth/clearLoginState" });
+    }
+  }, [justLoggedIn]);
 
   useEffect(() => {
     setIsShow(true);
@@ -91,7 +97,12 @@ const Home = () => {
           <h1 className="lg:text-4xl md:text-3xl mb-5 text-left transition-all">
             Ready to declutter you closet?
           </h1>
-          <Button className="bg-slate-500 text-white w-full" onClick={() => goLogin()}>Shop Now</Button>
+          <Button
+            className="bg-slate-500 text-white w-full"
+            onClick={() => goLogin()}
+          >
+            Shop Now
+          </Button>
         </div>
       </div>
 
@@ -103,9 +114,18 @@ const Home = () => {
         </div>
 
         <div className="flex gap-5 w-4/5 flex-wrap">
-          {categories.map((category) => (
-            <Button key={category} className="bg-white border border-black" onClick={() => window.location.href = `/products/${category}`}>{category}</Button>
-          ))}
+          {categories.map((category) => {
+            const slug = toSlug(category);
+            return (
+              <Button
+                key={category}
+                className="bg-white border border-black"
+                onClick={() => (window.location.href = `/products/${slug}`)}
+              >
+                {category}
+              </Button>
+            );
+          })}
         </div>
       </div>
 

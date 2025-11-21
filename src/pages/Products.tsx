@@ -1,39 +1,55 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useNavbar } from '../context/NavbarContext'
-import { useAppSelector } from '../hooks/reduxHooks'
-import { CardProduct } from '../components/Fragments/CardProduct'
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { CardProduct } from "../components/Fragments/CardProduct";
+import { useNavbar } from "../context/NavbarContext";
+import { useAppSelector } from "../hooks/reduxHooks";
 
-import Navbar from '../components/Layouts/Navbar'
-import Footer from '../components/Layouts/Footer'
-import { p } from 'motion/react-client'
+import Footer from "../components/Layouts/Footer";
+import Navbar from "../components/Layouts/Navbar";
 
 const Products = () => {
-  const { setIsShow } = useNavbar()
-  const { title } = useParams()
-  const { items: products } = useAppSelector(state => state.product)
+  const { setIsShow } = useNavbar();
+  const { title } = useParams();
+  const { items: products } = useAppSelector((state) => state.product);
 
-  const filtered = title ? products.filter((p) => p.category === title)  : products
+  const toSlug = (str: string) =>
+    str
+      .toLowerCase()
+      .replaceAll(/[^a-z0-9]+/g, "-") // convert spaces & symbols → "-"
+      .replaceAll(/^-+|-+$/g, "");
 
-  const readableTitle = title
-    ?.replace(/-/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  const fromSlug = (slug: string) => slug.replaceAll("-", " ");
+
+  const filtered = title
+    ? products.filter((p) => toSlug(p.category) === title)
+    : products;
+
+  const readableTitle = fromSlug(title || "").replaceAll(/\b\w/g, (c) =>
+    c.toUpperCase()
+  );
 
   useEffect(() => {
-    setIsShow(true)
-  }, [])
+    setIsShow(true);
+    console.log("TITLE:", title);
+    console.log(
+      "FILTER RESULT:",
+      products.filter((p) => p.category)
+    );
+  }, [title, products]);
 
   return (
-    <div className='flex flex-col'>
-      <Navbar/>
+    <div className="flex flex-col">
+      <Navbar />
 
       <div className="flex w-4/5 self-center mt-20">
-        <h1 className='text-3xl pb-5 pt-5 font-poppins font-semibold'>{readableTitle}</h1>
+        <h1 className="text-3xl pb-5 pt-5 font-poppins font-semibold">
+          {readableTitle}
+        </h1>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 w-4/5 self-center">
-        {products.length > 0 &&
-          products.map((product) => (
+        {filtered.length > 0 &&
+          filtered.map((product) => (
             <CardProduct key={product.id} to={`/product/${product.id}`}>
               <CardProduct.Header image={product.image} />
               <CardProduct.Body title={product.title}>
@@ -41,12 +57,12 @@ const Products = () => {
               </CardProduct.Body>
               <CardProduct.Footer price={`$${product.price}`} />
             </CardProduct>
-        ))}
+          ))}
       </div>
 
-      <Footer/>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;
