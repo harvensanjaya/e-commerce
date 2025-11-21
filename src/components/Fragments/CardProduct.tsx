@@ -11,6 +11,7 @@ interface CardProductProps {
 
 interface CardProductEmptyProps {
   children: ReactNode;
+  to: string;
 }
 
 interface HeaderProps {
@@ -34,17 +35,17 @@ const CardProduct: React.FC<CardProductProps> & {
   return (
     <Link
       to={to}
-      className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2"
+      className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2 font-poppins justify-between"
     >
       {children}
     </Link>
   );
 };
 
-const CardProductEmpty: React.FC<CardProductEmptyProps> = ({ children }) => {
+const CardProductEmpty: React.FC<CardProductEmptyProps> = ({ children,to }) => {
   return (
     <Link
-      to=""
+      to={to}
       className="max-w-sm rounded-md flex flex-col justify-center bg-slate-200"
     >
       <div className="px-5 py-5">

@@ -21,6 +21,7 @@ const Home = () => {
     loading,
     error,
   } = useAppSelector((state) => state.product);
+  const categories = [...new Set(products.map((p) => p.category))]
 
   const goLogin = () => (window.location.href = "/login");
 
@@ -102,27 +103,9 @@ const Home = () => {
         </div>
 
         <div className="flex gap-5 w-4/5 flex-wrap">
-          {products.length > 0 &&
-            products.slice(0, 5).map((product) => (
-              <Button key={product.id} className="bg-white border border-black">
-                {product.category}
-              </Button>
+          {categories.map((category) => (
+            <Button key={category} className="bg-white border border-black" onClick={() => window.location.href = `/products/${category}`}>{category}</Button>
           ))}
-          <Button className="bg-white border border-black w-auto">Vans</Button>
-          <Button className="bg-white border border-black">Bohoo</Button>
-          <Button className="bg-white border border-black">Mango</Button>
-          <Button className="bg-white border border-black">Reebok</Button>
-          <Button className="bg-white border border-black">Converse</Button>
-          <Button className="bg-white border border-black">Sandro</Button>
-          <Button className="bg-white border border-black">Nike</Button>
-          <Button className="bg-white border border-black">Adidas</Button>
-          <Button className="bg-white border border-black">Dior</Button>
-          <Button className="bg-white border border-black">Puma</Button>
-          <Button className="bg-white border border-black">Zara</Button>
-          <Button className="bg-white border border-black">Bershka</Button>
-          <Button className="bg-white border border-black">
-            American Eagle
-          </Button>
         </div>
       </div>
 

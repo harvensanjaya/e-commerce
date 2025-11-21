@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { BsCart3, BsChevronDown, BsSearch, BsSuitHeart } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa";
 import { useNavbar } from "../../context/NavbarContext";
@@ -34,7 +35,7 @@ const Navbar = () => {
     <div className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
       {isShow ? (
         <div className="flex justify-between w-4/5 sm:h-1/2 h-2/5 items-center gap-6 transition-all transition-discrete">
-          <img src={logo} alt="" className="h-full" />
+          <Link to={'/'} className="h-full"><img src={logo} alt="" className="h-full" /></Link>
 
           <div className="hidden lg:flex bg-slate-100 rounded-xl border border-slate-400 items-center grow px-3 gap-3 w-2/4 transition-all transition-discrete">
             <BsSearch />

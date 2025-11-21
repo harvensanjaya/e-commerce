@@ -1,25 +1,49 @@
 import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { useNavbar } from '../context/NavbarContext'
+import { useAppSelector } from '../hooks/reduxHooks'
+import { CardProduct } from '../components/Fragments/CardProduct'
 
 import Navbar from '../components/Layouts/Navbar'
 import Footer from '../components/Layouts/Footer'
+import { p } from 'motion/react-client'
 
 const Products = () => {
-  const {setIsShow, setIsLogin} = useNavbar()
+  const { setIsShow } = useNavbar()
+  const { title } = useParams()
+  const { items: products } = useAppSelector(state => state.product)
+
+  const filtered = title ? products.filter((p) => p.category === title)  : products
+
+  const readableTitle = title
+    ?.replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 
   useEffect(() => {
     setIsShow(true)
-    setIsLogin(true)
   }, [])
 
   return (
     <div className='flex flex-col'>
       <Navbar/>
 
-      <div className="flex w-4/5 self-center">
-        <h1 className='text-3xl pb-10 pt-5'>Items</h1>
+      <div className="flex w-4/5 self-center mt-20">
+        <h1 className='text-3xl pb-5 pt-5 font-poppins font-semibold'>{readableTitle}</h1>
       </div>
-      
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 w-4/5 self-center">
+        {products.length > 0 &&
+          products.map((product) => (
+            <CardProduct key={product.id} to={`/product/${product.id}`}>
+              <CardProduct.Header image={product.image} />
+              <CardProduct.Body title={product.title}>
+                {product.description.substring(0, 50)}...
+              </CardProduct.Body>
+              <CardProduct.Footer price={`$${product.price}`} />
+            </CardProduct>
+        ))}
+      </div>
+
       <Footer/>
     </div>
   )
