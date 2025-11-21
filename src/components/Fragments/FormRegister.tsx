@@ -1,7 +1,7 @@
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useState } from "react";
-import Button from "../Elements/Button";
-import { InputForm } from "../Elements/Input";
 import { Link } from "react-router-dom";
+import underConstructionLottie from "../../assets/Under Maintenance.lottie";
 
 interface FormRegisterProps {
   onConfirm: () => void;
@@ -12,10 +12,22 @@ function FormRegister({ onConfirm }: FormRegisterProps) {
 
   return (
     <div className="flex flex-col p-10 sm:shadow-[0px_10px_15px_3px_rgba(0,0,0,0.1)] rounded-md w-125 transition-all transition-discrete font-poppins">
-      <h1 className="text-2xl mb-5 font-semibold">Sign Up</h1>
-      <p className="text-sm mb-5">Enter your details below</p>
+      <div className="bg-red-700 flex items-center flex-col p-5">
+        <DotLottieReact src={underConstructionLottie} loop autoplay />
+        <p className="text-xl mb-5 text-center font-bold font-poppins text-white bg-red-700">
+          Form Register Under Construction!
+        </p>
+        <p className="text-sm text-center font-semibold font-poppins text-white bg-red-700">
+          Database Under Maintenance
+        </p>
+        <p className="text-sm text-center font-semibold font-poppins text-white bg-red-700">
+          Please Wait Next Update
+        </p>
+      </div>
+      {/* <h1 className="text-2xl mb-5 font-semibold">Sign Up</h1> */}
+      {/* <p className="text-sm mb-5">Enter your details below</p> */}
       <form className="w-full">
-        <InputForm
+        {/* <InputForm
           label="Full Name"
           name="fullname"
           type="text"
@@ -74,8 +86,13 @@ function FormRegister({ onConfirm }: FormRegisterProps) {
           }}
         >
           Sign Up
-        </Button>
-        <p className="text-sm text-center mt-5 font-poppins">Already have an account? <Link to="/login" className="text-slate-500">Login</Link></p>
+        </Button> */}
+        <p className="text-sm text-center mt-5 font-poppins">
+          Already have an account?{" "}
+          <Link to="/login" className="text-slate-500">
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );

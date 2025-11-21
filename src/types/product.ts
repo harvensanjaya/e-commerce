@@ -4,5 +4,6 @@ export interface Product {
   price: number;
   description: string;
   category: string;
-  image: string; // <- ini yang penting
+  image: string;
+  rating: { rate: number; count: number };
 }

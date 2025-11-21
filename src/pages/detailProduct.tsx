@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchProductById } from "../redux/product/productSlice";
 
 import { BsChevronLeft, BsChevronRight, BsSearch } from "react-icons/bs";
 import { Input } from "../components/Elements/Input";
@@ -6,17 +9,18 @@ import CartAdded from "../components/Fragments/CartAdded";
 import InfoDetailProduct from "../components/Fragments/InfoDetailProduct";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
-import SectionProduct from "../components/Layouts/SectionProduct";
-
-const images = [
-  "https://images.pexels.com/photos/1868566/pexels-photo-1868566.jpeg",
-  "https://images.pexels.com/photos/1868567/pexels-photo-1868567.jpeg",
-  "https://images.pexels.com/photos/13120870/pexels-photo-13120870.jpeg",
-];
 
 function DetailProduct() {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
   const [currentImage, setCurrentImage] = useState(0);
   const [showCart, setShowCart] = useState(false);
+
+  const { selectedProduct: product, selectedProductLoading } = useAppSelector(
+    (state) => state.product
+  );
+
+  const images = product?.images || [];
 
   const prevSlide = () => {
     const isFirstSlide = currentImage === 0;
@@ -29,6 +33,13 @@ function DetailProduct() {
     const newIndex = isLastSlide ? 0 : currentImage + 1;
     setCurrentImage(newIndex);
   };
+
+  useEffect(() => {
+    if (id) dispatch(fetchProductById(Number(id)));
+  }, [id, dispatch]);
+
+  if (selectedProductLoading) return <p>Loading...</p>;
+  if (!product) return <p>Product not found</p>;
 
   return (
     <div className="">
@@ -54,7 +65,7 @@ function DetailProduct() {
           {/* Main Image Container */}
           <div className="relative xs:w-[400px] xs:h-[500px] sm:w-[450px] sm:h-[580px] flex justify-center items-center flex-auto">
             <img
-              src={images[currentImage]}
+              src={product.image}
               alt="Product"
               className="object-cover h-[400px] sm:w-[450px] sm:h-[580px] lg:w-full lg:h-full rounded-lg shadow-md transition-all duration-300"
             />
@@ -96,10 +107,11 @@ function DetailProduct() {
         <InfoDetailProduct
           onConfirm={() => setShowCart(true)}
           className="col-span-4"
+          product={product}
         />
       </div>
 
-      <SectionProduct title="Other Product" />
+      {/* <SectionProduct title="Other Product" products={products} /> */}
 
       <Footer />
       <CartAdded isOpen={showCart} onConfirm={() => setShowCart(false)} />

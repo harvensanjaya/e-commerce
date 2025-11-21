@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import AuthToast from "./components/Fragments/AuthToast";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
 import Home from "./pages";
@@ -10,7 +11,6 @@ import Products from "./pages/Products";
 import ProfilePage from "./pages/Profile";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
-import AuthToast from "./components/Fragments/AuthToast";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <Products />,
   },
   {
-    path: "/product",
+    path: "/product/:id",
     element: (
       <ProtectedRoute>
         <DetailProduct />
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
-      <AuthToast /> 
+      <AuthToast />
       <RouterProvider router={router} />
     </>
   );

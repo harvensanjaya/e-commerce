@@ -1,19 +1,50 @@
+import type React from "react";
+import type { ReactNode } from "react";
 import { BsSuitHeart } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
-function CardProduct(props) {
-  const { children } = props;
-  return (
-    <div className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2">
-      {children}
-    </div>
-  );
+// interfaces
+interface CardProductProps {
+  children: ReactNode;
+  to: string;
 }
 
-function CardProductEmpty(props) {
-  const { children } = props;
+interface CardProductEmptyProps {
+  children: ReactNode;
+}
+
+interface HeaderProps {
+  image: string;
+}
+
+interface BodyProps {
+  title: string;
+  children: ReactNode;
+}
+
+interface FooterProps {
+  price: string | number;
+}
+
+const CardProduct: React.FC<CardProductProps> & {
+  Header: React.FC<HeaderProps>;
+  Body: React.FC<BodyProps>;
+  Footer: React.FC<FooterProps>;
+} = ({ children, to }) => {
   return (
-    <a
-      href=""
+    <Link
+      to={to}
+      className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2"
+    >
+      {children}
+    </Link>
+  );
+};
+
+const CardProductEmpty: React.FC<CardProductEmptyProps> = ({ children }) => {
+  return (
+    <Link
+      to=""
       className="max-w-sm rounded-md flex flex-col justify-center bg-slate-200"
     >
       <div className="px-5 py-5">
@@ -21,39 +52,32 @@ function CardProductEmpty(props) {
           {children}
         </h5>
       </div>
-    </a>
-  );
-}
-
-const Header = (props) => {
-  const { image } = props;
-  return (
-    <a href="" className="">
-      <img
-        src={image}
-        alt=""
-        className="rounded-md object-cover object-center sm:h-60 h-40 aspect-square"
-      />
-    </a>
+    </Link>
   );
 };
 
-const Body = (props) => {
-  const { children, title } = props;
+const Header: React.FC<HeaderProps> = ({ image }) => {
+  return (
+    <img
+      src={image}
+      alt=""
+      className="rounded-md object-cover object-center sm:h-60 h-40 aspect-square"
+    />
+  );
+};
+
+const Body: React.FC<BodyProps> = ({ title, children }) => {
   return (
     <div className="">
-      <a href="">
-        <h5 className="text-xl font-semibold tracking-tight text-black">
-          {title}
-        </h5>
-        <p className="text-xs text-black">{children}</p>
-      </a>
+      <h5 className="text-xl font-semibold tracking-tight text-black">
+        {title}
+      </h5>
+      <p className="text-xs text-black">{children}</p>
     </div>
   );
 };
 
-const Footer = (props) => {
-  const { price } = props;
+const Footer: React.FC<FooterProps> = ({ price }) => {
   return (
     <div className="flex flex-col justify-between">
       <span className="text-md text-black">{price}</span>
