@@ -1,8 +1,6 @@
+import { Link } from "react-router-dom";
 import type { Product } from "../../types/product";
 import { CardProduct, CardProductEmpty } from "../Fragments/CardProduct";
-import { Link } from "react-router-dom";
-import { useAppSelector } from "../../hooks/reduxHooks";
-import { useDispatch, useSelector } from "react-redux";
 
 interface SectionProductProps {
   readonly title: string;
@@ -11,10 +9,6 @@ interface SectionProductProps {
 
 function SectionProduct({ title, products }: SectionProductProps) {
   const slug = title.toLowerCase().replace(/\s+/g, "-");
-
-  const dispatch = useDispatch();
-  const wishlistItems = useAppSelector((state) => state.wishlist.items);
-  const exists = wishlistItems.some((i) => i.id === product.id);
 
   return (
     <div className={`flex flex-col gap-2 py-5 items-center `}>
@@ -35,12 +29,15 @@ function SectionProduct({ title, products }: SectionProductProps) {
                 to={`/product/${product.id}`}
               />
               <CardProduct.Body
-                title="Linen T-Shirt"
+                title={product.title}
                 to={`/product/${product.id}`}
               >
                 {product.description.substring(0, 50)}...
               </CardProduct.Body>
-              <CardProduct.Footer price={`$${product.price}`} />
+              <CardProduct.Footer
+                price={`$${product.price}`}
+                product={product}
+              />
             </CardProduct>
           ))}
         <CardProductEmpty to={`/products/all/${slug}`}>

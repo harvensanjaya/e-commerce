@@ -1,19 +1,19 @@
-import { useEffect, useEffectEvent } from "react";
+import { useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
+import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { useNavbar } from '../context/NavbarContext'
 
+import { Link } from "react-router-dom";
 import Button from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
 import { hideModal, showModal } from "../redux/auth/modalSlice";
-import { Link } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const {setIsShow} = useNavbar()
+  const { setIsShow } = useNavbar();
   const { user, justLoggedIn } = useAppSelector((state) => state.auth);
 
   const {
@@ -33,7 +33,7 @@ const Home = () => {
 
   useEffect(() => {
     if (justLoggedIn && user) {
-      dispatch(showModal(`Authenticated as ${user.user}`));
+      dispatch(showModal(`Authenticated as ${user.username}`));
 
       setTimeout(() => {
         dispatch(hideModal());
@@ -45,8 +45,8 @@ const Home = () => {
   }, [justLoggedIn]);
 
   useEffect(() => {
-    setIsShow(true)
-  }, [])
+    setIsShow(true);
+  }, []);
 
   if (loading) {
     return (

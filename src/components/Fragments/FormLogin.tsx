@@ -1,16 +1,16 @@
-import { use, useEffect, useRef } from "react";
-import Button from "../Elements/Button";
-import { InputForm } from "../Elements/Input";
+import { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { loginThunk } from "../../redux/auth/authThunks";
-import { Link } from "react-router-dom";
-import { showModal, hideModal } from "../../redux/auth/modalSlice";
-import {useNavigate} from 'react-router-dom'
+import Button from "../Elements/Button";
+import { InputForm } from "../Elements/Input";
 
 function FormLogin() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {loading, error, isAuthenticated} = useAppSelector((state) => state.auth);
+  const { loading, error, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const usernameRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -19,14 +19,14 @@ function FormLogin() {
     const username = e.currentTarget.username.value;
     const password = e.currentTarget.password.value;
 
-    dispatch(loginThunk({ username, password }))
+    dispatch(loginThunk({ username, password }));
   };
 
   useEffect(() => {
     usernameRef.current?.focus();
     if (isAuthenticated) {
-    navigate("/");
-  }
+      navigate("/");
+    }
   }, [isAuthenticated]);
 
   return (
@@ -50,7 +50,9 @@ function FormLogin() {
           placeholder="Enter your password"
         />
         {error && (
-          <p className="text-red-600 text-sm text-center mt-2 font-poppins">*{error}*</p>
+          <p className="text-red-600 text-sm text-center mt-2 font-poppins">
+            *{error}*
+          </p>
         )}
         <Button
           className="bg-slate-500 text-white w-full mt-5"
@@ -59,7 +61,12 @@ function FormLogin() {
         >
           {loading ? "Loading..." : "Continue"}
         </Button>
-        <p className="text-sm text-center mt-5 font-poppins">Don't have an account? <Link to="/register" className="text-slate-500">Sign Up</Link></p>
+        <p className="text-sm text-center mt-5 font-poppins">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-slate-500">
+            Sign Up
+          </Link>
+        </p>
       </form>
     </div>
   );

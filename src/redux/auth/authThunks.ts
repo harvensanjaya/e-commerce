@@ -7,10 +7,25 @@ export const loginThunk = createAsyncThunk(
   async (data: { username: string; password: string }, thunkAPI) => {
     try {
       const result = await authService.login(data.username, data.password);
-      return { token: result.token };
+      return { token: result.data };
     } catch (err: any) {
-      const message = err?.response?.data || "Login failed.";
+      const message = err?.response?.data?.meta?.message || "Login failed.";
       return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchUserThunk = createAsyncThunk(
+  "auth/me",
+  async (_, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return thunkAPI.rejectWithValue("No Token Found");
+
+      const user = await authService.getUser(token);
+      return user;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue("Failed to fetch user");
     }
   }
 );

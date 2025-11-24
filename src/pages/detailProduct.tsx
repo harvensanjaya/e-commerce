@@ -67,7 +67,7 @@ function DetailProduct() {
             <img
               src={product.image}
               alt="Product"
-              className="object-cover h-[400px] sm:w-[450px] sm:h-[580px] lg:w-full lg:h-full rounded-lg shadow-md transition-all duration-300"
+              className="object-cover h-[400px] sm:w-[450px] sm:h-[580px] lg:w-full lg:h-full rounded-lg transition-all duration-300"
             />
 
             {/* Left Arrow */}

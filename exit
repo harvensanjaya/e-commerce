@@ -1,0 +1,19 @@
+[33m5748e80[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Progress Make Wishlist Redux, Wishlist Page
+[33m3322a37[m Debugging FilterByCategory
+[33m3991a69[m GetData For SectionProduct and AllData for Products Page, Progress debugging FilteredByCategory for ProductsPage
+[33ma9afee0[m Updated FetchData for getProductById for spesific detailProduct
+[33m1b42955[m Auth by redux toolkit, and progress make register system
+[33m737c715[m Updated Auth System and state for navbar
+[33m6f1265e[m Updated Font Poppins, Make Basic Login with local storage
+[33m76e6b84[m Updated Fetching Data by redux toolkit
+[33m05dd6c2[m Fixed Bug Fetching Data, Continue move to Redux toolkit for Fetching Data
+[33m5d9f7a8[m Updated dummy data to fakestoreAPI
+[33md5df98a[m Finished all, exclude Ordered History, move page to page
+[33m843bca7[m Added detailPage, Responsive not yet
+[33m18fb464[m Updated Responsive, Changed the dropdown and props for navbar
+[33md274a02[m Added CardProduct, Fetch Data FakeStoreAPI on Services Folder
+[33m35dcc1c[m Added Footer Layouts, Products Page default
+[33mfde6a5a[m Updated Navbar State Global and Jumbotron on Landing Page
+[33m897dd89[m Updated LoginPage RegisterPage and Change Navbar State to Global State
+[33m173a9e4[m Updated Navbar for 2 Condition and Progress Login Pages
+[33m0426643[m Initial commit

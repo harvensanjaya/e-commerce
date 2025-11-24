@@ -9,7 +9,6 @@ import OrderSummary from "../components/Fragments/OrderSummary";
 import PaymentModal from "../components/Fragments/SuccessPayment";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
-import SectionProduct from "../components/Layouts/SectionProduct";
 
 function OrderPage() {
   const [showModal, setShowModal] = useState(false);
@@ -208,7 +207,7 @@ function OrderPage() {
         />
       </div>
 
-      <SectionProduct title="Other Product" />
+      {/* <SectionProduct title="Other Product" /> */}
 
       <Footer />
       <PaymentModal isOpen={showModal} onConfirm={() => setShowModal(false)} />

@@ -1,11 +1,11 @@
 import type React from "react";
 import type { ReactNode } from "react";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { toggleWishlist } from "../../redux/wishlist/wishlistSlice";
-import { useDispatch, useSelector } from "react-redux";
-import type { Product } from "../../types/product";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import { toggleWishlist } from "../../redux/wishlist/wishlistSlice";
+import type { Product } from "../../types/product";
 
 // interfaces
 interface CardProductProps {
@@ -39,7 +39,7 @@ const CardProduct: React.FC<CardProductProps> & {
   Footer: React.FC<FooterProps>;
 } = ({ children }) => {
   return (
-    <div className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2 font-poppins justify-between">
+    <div className="w-full rounded-lg shadow sm:p-4 p-2 flex flex-col gap-2 font-poppins">
       {children}
     </div>
   );
@@ -92,16 +92,19 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
   const exists = wishlistItems.some((i) => i.id === product.id);
 
   return (
-    <div className="flex flex-col justify-between">
+    <div className="flex flex-col justify-between flex-auto">
       <span className="text-md text-black">{price}</span>
       <div className="flex justify-between">
         <p>8 / M</p>
         <div className="flex items-center">
-          <button onClick={() => dispatch(toggleWishlist(product))}>
+          <button
+            onClick={() => dispatch(toggleWishlist(product))}
+            className="cursor-pointer"
+          >
             {exists ? (
-              <BsSuitHeartFill size={15} color="red" />
+              <BsSuitHeartFill size={20} color="red" />
             ) : (
-              <BsSuitHeart size={15} color="black" />
+              <BsSuitHeart size={20} color="black" />
             )}
           </button>
           <p className="ml-1 text-black">12</p>

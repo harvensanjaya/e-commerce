@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "./hooks/reduxHooks";
-import { fetchProducts } from "./redux/product/productSlice";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthToast from "./components/Fragments/AuthToast";
+import RootLayout from "./components/Layouts/RootLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useAppDispatch } from "./hooks/reduxHooks";
 import "./index.css";
 import Home from "./pages";
 import CartPage from "./pages/Cart";
@@ -14,7 +14,8 @@ import Products from "./pages/Products";
 import ProfilePage from "./pages/Profile";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
-import RootLayout from "./components/Layouts/RootLayout";
+import { fetchUserThunk } from "./redux/auth/authThunks";
+import { fetchProducts } from "./redux/product/productSlice";
 
 const router = createBrowserRouter([
   {
@@ -116,6 +117,11 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchProducts());
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchUserThunk());
+    }
   }, []);
 
   return (

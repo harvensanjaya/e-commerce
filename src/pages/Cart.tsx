@@ -2,7 +2,6 @@ import { FiMapPin } from "react-icons/fi";
 import DetailSummary from "../components/Fragments/DetailSummary";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
-import SectionProduct from "../components/Layouts/SectionProduct";
 
 function CartPage() {
   return (
@@ -139,7 +138,7 @@ function CartPage() {
         <DetailSummary className="col-span-3" />
       </div>
 
-      <SectionProduct title="Other Product" />
+      {/* <SectionProduct title="Other Product" products={prod} /> */}
 
       <Footer />
     </div>
