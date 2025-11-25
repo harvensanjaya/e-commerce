@@ -7,3 +7,10 @@ export const getAllProducts = async (): Promise<Product[]> => {
   );
   return response.data.data;
 };
+
+export const fetchProductByIdServices = async (id: string) => {
+  const response = await axios.get(
+    `https://back-end-vintage.vercel.app/api/product/${id}`
+  )
+  return response.data;
+}

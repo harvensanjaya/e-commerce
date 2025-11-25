@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import {
   Bs0CircleFill,
   BsHeart,
-  BsStar,
-  BsStarFill,
-  BsStarHalf,
+  // BsStar,
+  // BsStarFill,
+  // BsStarHalf,
 } from "react-icons/bs";
 import { useNavbar } from "../../context/NavbarContext";
 import type { Product } from "../../types/product";
@@ -21,52 +21,62 @@ function InfoDetailProduct({
   className,
   product,
 }: InfoDetailProductProps) {
-  const { setIsLogin, setIsShow } = useNavbar();
+  const { setIsShow } = useNavbar();
 
-  const renderStar = (rating: number = 0) => {
-    const star = [];
+  // untuk rating fitur
+  // const renderStar = (rating: number = 0) => {
+  //   const star = [];
 
-    const fullStar = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5;
-    const emptyStar = 5 - fullStar - (halfStar ? 1 : 0);
+  //   const fullStar = Math.floor(rating);
+  //   const halfStar = rating % 1 >= 0.5;
+  //   const emptyStar = 5 - fullStar - (halfStar ? 1 : 0);
 
-    for (let i = 0; i < fullStar; i++) {
-      star.push(<BsStarFill size={12} />);
-    }
+  //   for (let i = 0; i < fullStar; i++) {
+  //     star.push(<BsStarFill size={12} />);
+  //   }
 
-    if (halfStar) {
-      star.push(<BsStarHalf size={12} />);
-    }
+  //   if (halfStar) {
+  //     star.push(<BsStarHalf size={12} />);
+  //   }
 
-    for (let i = 0; i < emptyStar; i++) {
-      star.push(<BsStar size={12} />);
-    }
+  //   for (let i = 0; i < emptyStar; i++) {
+  //     star.push(<BsStar size={12} />);
+  //   }
 
-    return star;
+  //   return star;
+  // };
+
+  const formatRupiah = (value: number = 0) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value);
   };
 
   useEffect(() => {
-    setIsLogin(true);
     setIsShow(true);
   }, []);
   return (
     <div
-      className={`flex flex-col p-5 rounded-md w-full border border-slate-400 flex-1 mt-10 lg:mt-0 ${className}`}
+      className={`flex flex-col p-5 rounded-md w-full border border-slate-400 flex-1 mt-10 lg:mt-0 font-poppins ${className}`}
     >
       <div className="flex flex-col w-full gap-2 mb-5">
         <div className="flex justify-between w-full items-center">
           <h1 className="sm:text-3xl xs:text-2xl text-xl font-bold transition-all">
-            ${product?.price}
+            {formatRupiah(product?.price)}
           </h1>
           <BsHeart className="sm:text-2xl text-xl transition-all" />
         </div>
-        <p className="sm:text-xl text-base transition-all">{product?.title}</p>
+        <p className="sm:text-xl text-base transition-all">
+          {product?.product_name}
+        </p>
         <div className="flex xs:gap-10 gap-5 items-center text-slate-500 flex-wrap">
-          <p className="text-sm text-slate-500">XL</p>
+          <p className="text-sm text-slate-500">{product?.size}</p>
           <Bs0CircleFill size={5} />
-          <p className="text-sm text-slate-500">Very Good</p>
+          <p className="text-sm text-slate-500">{product?.condition}</p>
           <Bs0CircleFill size={5} />
-          <p className="text-sm text-slate-500">Cianjur</p>
+          <p className="text-sm text-slate-500">{product?.from}</p>
         </div>
       </div>
       <p className="text-gray-700 text-md mb-2">Item Description</p>
@@ -76,7 +86,7 @@ function InfoDetailProduct({
           <h1 className="flex-1 font-semibold sm:text-lg text-sm">
             Store name
           </h1>
-          <p className="flex-1 sm:text-lg text-sm">Marnie</p>
+          <p className="flex-1 sm:text-lg text-sm">{product?.store_name}</p>
         </div>
         <div className="flex justify-between w-full">
           <h1 className="flex-1 font-semibold sm:text-lg text-sm">Category</h1>
@@ -84,11 +94,11 @@ function InfoDetailProduct({
         </div>
         <div className="flex justify-between w-full">
           <h1 className="flex-1 font-semibold sm:text-lg text-sm">Brand</h1>
-          <p className="flex-1 sm:text-lg text-sm">Boho</p>
+          <p className="flex-1 sm:text-lg text-sm">{product?.brand}</p>
         </div>
         <div className="flex justify-between w-full">
           <h1 className="flex-1 font-semibold sm:text-lg text-sm">Condition</h1>
-          <p className="flex-1 sm:text-lg text-sm">Very Good</p>
+          <p className="flex-1 sm:text-lg text-sm">{product?.condition}</p>
         </div>
         <div className="flex justify-between w-full">
           <h1 className="flex-1 font-semibold sm:text-lg text-sm">Uploaded</h1>
@@ -96,7 +106,9 @@ function InfoDetailProduct({
         </div>
         <div className="flex justify-between w-full">
           <h1 className="flex-1 font-semibold sm:text-lg text-sm">Shipping</h1>
-          <p className="flex-1 sm:text-lg text-sm">Rp20000</p>
+          <p className="flex-1 sm:text-lg text-sm">
+            {formatRupiah(product?.shipping)}
+          </p>
         </div>
       </div>
 
@@ -122,10 +134,10 @@ function InfoDetailProduct({
         <div className="flex-auto">
           <p className="sm:text-base text-sm font-semibold">Dudung Sarudung</p>
           <div className="flex gap-2">
-            <div className="flex gap-1">
+            {/* <div className="flex gap-1">
               {renderStar(product?.rating?.rate)}
             </div>
-            <p className="text-xs text-gray-500">({product?.rating.count})</p>
+            <p className="text-xs text-gray-500">({product?.rating.count})</p> */}
           </div>
         </div>
       </div>

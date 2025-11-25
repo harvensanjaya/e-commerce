@@ -11,6 +11,15 @@ function SectionProduct({ title, products }: SectionProductProps) {
   const slug = title.toLowerCase().replace(/\s+/g, "-");
   const DEFAULT_IMAGE =
     "https://media.istockphoto.com/id/861576608/vector/empty-shopping-bag-icon-online-business-vector-icon-template.jpg?s=612x612&w=0&k=20&c=I7MbHHcjhRH4Dy0NVpf4ZN4gn8FVDnwn99YdRW2x5k0=";
+
+  const formatRupiah = (value: number = 0) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
+
   return (
     <div className={`flex flex-col gap-2 py-5 items-center `}>
       <div className="flex w-4/5 mt-10 mb-5 self-center justify-between items-center">
@@ -36,7 +45,7 @@ function SectionProduct({ title, products }: SectionProductProps) {
                 {product.description.substring(0, 50)}...
               </CardProduct.Body>
               <CardProduct.Footer
-                price={`$${product.price}`}
+                price={`${formatRupiah(product.price)}`}
                 product={product}
               />
             </CardProduct>

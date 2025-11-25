@@ -89,7 +89,7 @@ const Body: React.FC<BodyProps> = ({ title, children, to }) => {
 const Footer: React.FC<FooterProps> = ({ price, product }) => {
   const dispatch = useDispatch();
   const wishlistItems = useAppSelector((state) => state.wishlist.items);
-  const exists = wishlistItems.some((i) => i.id === product.id);
+  const exists = wishlistItems.some((i) => i._id === product._id);
 
   return (
     <div className="flex flex-col justify-between flex-auto">

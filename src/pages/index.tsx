@@ -21,7 +21,7 @@ const Home = () => {
     loading,
     error,
   } = useAppSelector((state) => state.product);
-  const categories = [...new Set(products.map((p) => p.category))];
+  const brands = [...new Set(products.map((p) => p.brand))];
 
   const toSlug = (str: string) =>
     str
@@ -110,15 +110,15 @@ const Home = () => {
         </div>
 
         <div className="flex gap-5 w-4/5 flex-wrap">
-          {categories.map((category) => {
-            const slug = toSlug(category);
+          {brands.map((brand) => {
+            const slug = toSlug(brand);
             return (
               <Link
-                key={category}
+                key={brand}
                 className="bg-white border border-black p-2 rounded-lg text-sm hover:bg-slate-700 hover:text-white transition-all transition-discrete"
                 to={`/products/${slug}`}
               >
-                {category}
+                {brand}
               </Link>
             );
           })}

@@ -23,11 +23,19 @@ const Products = () => {
 
   const filtered = isAll
     ? products
-    : products.filter((p) => toSlug(p.category) === title);
+    : products.filter((p) => toSlug(p.brand) === title);
 
   const readableTitle = fromSlug(title || "").replaceAll(/\b\w/g, (c) =>
     c.toUpperCase()
   );
+
+  const formatRupiah = (value: number = 0) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
 
   useEffect(() => {
     setIsShow(true);
@@ -58,7 +66,7 @@ const Products = () => {
                 {product.description.substring(0, 50)}...
               </CardProduct.Body>
               <CardProduct.Footer
-                price={`$${product.price}`}
+                price={`${formatRupiah(product.price)}`}
                 product={product}
               />
             </CardProduct>

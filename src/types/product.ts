@@ -10,5 +10,6 @@ export interface Product {
   product_name: string;
   shipping: number;
   size: string;
+  store_name:string;
   rating: { rate: number; count: number };
 }

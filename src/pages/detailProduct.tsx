@@ -35,7 +35,7 @@ function DetailProduct() {
   };
 
   useEffect(() => {
-    if (id) dispatch(fetchProductById(Number(id)));
+    if (id) dispatch(fetchProductById(id));
   }, [id, dispatch]);
 
   if (selectedProductLoading) return <p>Loading...</p>;
@@ -65,7 +65,7 @@ function DetailProduct() {
           {/* Main Image Container */}
           <div className="relative xs:w-[400px] xs:h-[500px] sm:w-[450px] sm:h-[580px] flex justify-center items-center flex-auto">
             <img
-              src={product.images[0]}
+              src={product.images[currentImage]}
               alt="Product"
               className="object-cover h-[400px] sm:w-[450px] sm:h-[580px] lg:w-full lg:h-full rounded-lg transition-all duration-300"
             />

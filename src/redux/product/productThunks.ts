@@ -1,6 +1,6 @@
 // redux/product/productThunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllProducts } from "../../services/product.service";
+import { getAllProducts,fetchProductByIdServices } from "../../services/product.service";
 import type { ProductState } from "./productSlice";
 
 // 🔥 Fetch semua produk (dengan caching 5 menit)
@@ -27,13 +27,8 @@ export const fetchProducts = createAsyncThunk(
 // 🔥 Fetch detail produk berdasarkan ID
 export const fetchProductById = createAsyncThunk(
   "product/fetchById",
-  async (id: number | string, { getState }) => {
-    const state = getState() as { product: ProductState };
-
-    const cached = state.product.items.find((p) => p._id === Number(id));
-    if (cached) return cached;
-
-    const response = await getAllProducts();
-    return response.find((p) => p._id === Number(id));
+  async (id: string) => {
+    const response = await fetchProductByIdServices(id)
+    return response.data
   }
 );
