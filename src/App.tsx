@@ -15,7 +15,7 @@ import ProfilePage from "./pages/Profile";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
 import { fetchUserThunk } from "./redux/auth/authThunks";
-import { fetchProducts } from "./redux/product/productSlice";
+import { fetchProducts } from "./redux/product/productThunks";
 
 const router = createBrowserRouter([
   {

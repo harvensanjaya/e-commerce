@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { fetchProductById } from "../redux/product/productSlice";
+import { fetchProductById } from "../redux/product/productThunks";
 
 import { BsChevronLeft, BsChevronRight, BsSearch } from "react-icons/bs";
 import { Input } from "../components/Elements/Input";
@@ -65,7 +65,7 @@ function DetailProduct() {
           {/* Main Image Container */}
           <div className="relative xs:w-[400px] xs:h-[500px] sm:w-[450px] sm:h-[580px] flex justify-center items-center flex-auto">
             <img
-              src={product.image}
+              src={product.images[0]}
               alt="Product"
               className="object-cover h-[400px] sm:w-[450px] sm:h-[580px] lg:w-full lg:h-full rounded-lg transition-all duration-300"
             />
