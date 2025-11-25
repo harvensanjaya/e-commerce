@@ -9,7 +9,7 @@ import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
 import SectionProduct from "../components/Layouts/SectionProduct";
-import { hideModal, showModal } from "../redux/auth/modalSlice";
+import { hideModal, showModal } from "../redux/modal/modalSlice";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ const Home = () => {
 
   useEffect(() => {
     if (justLoggedIn && user) {
-      dispatch(showModal(`Authenticated as ${user.username}`));
+      dispatch(showModal(`Authenticated as ${user.fullName}`));
 
       setTimeout(() => {
         dispatch(hideModal());

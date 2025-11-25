@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import productReducer  from './product/productSlice'
 import authReducer from './auth/authSlice'
-import modalReducer from './auth/modalSlice'
+import modalReducer from './modal/modalSlice'
 import wishlistReducer from './wishlist/wishlistSlice'
 
 export const store = configureStore({

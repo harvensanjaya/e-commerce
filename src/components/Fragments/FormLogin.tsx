@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { loginThunk } from "../../redux/auth/authThunks";
+import { fetchUserThunk, loginThunk } from "../../redux/auth/authThunks";
 import Button from "../Elements/Button";
 import { InputForm } from "../Elements/Input";
 
 function FormLogin() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, error, isAuthenticated } = useAppSelector(
+  const { loading, error, isAuthenticated, justLoggedIn } = useAppSelector(
     (state) => state.auth
   );
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -19,7 +19,11 @@ function FormLogin() {
     const username = e.currentTarget.username.value;
     const password = e.currentTarget.password.value;
 
-    dispatch(loginThunk({ username, password }));
+    const result = await dispatch(loginThunk({ username, password }));
+
+    if (loginThunk.fulfilled.match(result)) {
+      dispatch(fetchUserThunk());
+    }
   };
 
   useEffect(() => {
@@ -27,7 +31,7 @@ function FormLogin() {
     if (isAuthenticated) {
       navigate("/");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, justLoggedIn]);
 
   return (
     <div className="flex flex-col p-10 sm:shadow-[0px_10px_15px_3px_rgba(0,0,0,0.1)] rounded-md w-125 transition-all transition-discrete">
@@ -42,12 +46,14 @@ function FormLogin() {
           type="text"
           placeholder="Enter your username"
           ref={usernameRef}
+          required
         />
         <InputForm
           label="Password"
           name="password"
           type="password"
           placeholder="Enter your password"
+          required
         />
         {error && (
           <p className="text-red-600 text-sm text-center mt-2 font-poppins">

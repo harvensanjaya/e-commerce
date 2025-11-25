@@ -31,4 +31,19 @@ export const authService = {
       return null;
     }
   },
+
+  register: async(fullName: string, email: string, username: string, password: string, confirmPassword: string) => {
+    const response = await axios.post(
+      "https://back-end-vintage.vercel.app/api/auth/register",
+      {
+        fullName,
+        username,
+        email,
+        password,
+        confirmPassword
+      }
+    );
+
+    return response.data;
+  }
 };

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
-import { fetchUserThunk, loginThunk } from "./authThunks";
+import { fetchUserThunk, loginThunk, registerThunk } from "./authThunks";
 
 interface AuthState {
   token: string | null;
@@ -9,6 +9,7 @@ interface AuthState {
   error: string | null;
   isAuthenticated: boolean;
   justLoggedIn: boolean;
+  justRegistered: boolean;
 }
 
 const tokenFromStorage = localStorage.getItem("token");
@@ -20,6 +21,7 @@ const initialState: AuthState = {
   error: null,
   isAuthenticated: !!tokenFromStorage,
   justLoggedIn: false,
+  justRegistered: false,
 };
 
 const authSlice = createSlice({
@@ -35,6 +37,9 @@ const authSlice = createSlice({
     clearLoginState: (state) => {
       state.justLoggedIn = false;
     },
+    clearRegisterState: (state) => {
+      state.justRegistered = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -43,11 +48,11 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
-        const token = action.payload.token;
+        const { token, user } = action.payload;
 
         state.loading = false;
         state.token = token;
-        state.user = jwtDecode(token);
+        state.user = user;
         state.isAuthenticated = true;
         state.justLoggedIn = true;
 
@@ -75,6 +80,18 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
       });
+
+    builder
+    .addCase(registerThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+    }).addCase(registerThunk.fulfilled, (state) => {
+        state.loading = false;
+        state.justRegistered = true;
+    }).addCase(registerThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string
+    })
   },
 });
 

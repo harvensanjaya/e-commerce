@@ -2,21 +2,20 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { AnimatePresence, motion } from "motion/react";
 import planeAnimation from "../../assets/MessageSentSuccessfully_Plane.lottie";
 import Button from "../Elements/Button";
+import { useNavigate } from "react-router-dom";
 
 interface SuccessRegisModalProps {
-  onConfirm: () => void;
   isOpen?: boolean;
 }
 
-function SuccessRegisModal({
-  onConfirm,
-  isOpen = true,
-}: SuccessRegisModalProps) {
+function SuccessRegisModal({ isOpen = true }: SuccessRegisModalProps) {
+  const navigate = useNavigate();
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
+          className="fixed inset-0 flex items-center justify-center bg-black/40 z-50 font-poppins"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -46,9 +45,9 @@ function SuccessRegisModal({
 
             <Button
               className="bg-gray-200 text-black w-full"
-              onClick={onConfirm}
+              onClick={() => navigate("/login")}
             >
-              Go to Home Page
+              Go to Login
             </Button>
           </motion.div>
         </motion.div>
