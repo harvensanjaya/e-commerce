@@ -1,42 +1,54 @@
+// redux/wishlist/wishlistSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 import type { Product } from "../../types/product";
+import {
+  addWishlistItem,
+  fetchUserWishlist,
+  removeWishlistItem,
+} from "./wishlistThunk";
 
 interface WishlistState {
-    items: Product[]
+  items: Product[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: WishlistState = {
-    items: []
-}
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const wishlistSlice = createSlice({
-    name: "wishlist",
-    initialState,
-    reducers: {
-        addToWishlist: (state, action) => {
-            const exists = state.items.find((i) => i.id === action.payload.id)
+  name: "wishlist",
+  initialState,
+  reducers: {},
 
-            if (!exists) {
-                state.items.push(action.payload)
-            }
-        },
+  extraReducers: (builder) => {
+    // Fetch wishlist user
+    builder.addCase(fetchUserWishlist.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchUserWishlist.fulfilled, (state, action) => {
+      state.loading = false;
+      state.items = action.payload;
+    });
+    builder.addCase(fetchUserWishlist.rejected, (state) => {
+      state.loading = false;
+      state.error = "Failed to load wishlist";
+    });
 
-        removeWishlist: (state,action ) => {
-            state.items = state.items.filter((i) => i.id !== action.payload.id)
-        },
+    // Add wishlist
+    builder.addCase(addWishlistItem.fulfilled, (state, action) => {
+      const exists = state.items.some((i) => i._id === action.payload._id);
+      if (!exists) state.items.push(action.payload);
+    });
 
-        toggleWishlist: (state, action) => {
-            const exists = state.items.find((i) => i.id === action.payload.id)
+    // Remove wishlist
+    builder.addCase(removeWishlistItem.fulfilled, (state, action) => {
+      state.items = state.items.filter((i) => i._id !== action.payload);
+    });
+  },
+});
 
-            if (exists) {
-                state.items = state.items.filter((i) => i.id !== action.payload.id)
-            } else {
-                state.items.push(action.payload)
-            }
-        }
-    }
-})
-
-export const { addToWishlist, removeWishlist, toggleWishlist} = wishlistSlice.actions
-
-export default wishlistSlice.reducer
+export default wishlistSlice.reducer;

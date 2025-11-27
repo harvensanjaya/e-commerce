@@ -32,14 +32,14 @@ const Wishlist = () => {
         )}
 
         {wishlistItems.map((product) => (
-          <CardProduct key={product.id}>
+          <CardProduct key={product._id}>
             <CardProduct.Header
-              image={product.image}
-              to={`/product/${product.id}`}
+              image={product.images[0]}
+              to={`/product/${product._id}`}
             />
             <CardProduct.Body
-              title={product.title}
-              to={`/product/${product.id}`}
+              title={product.product_name}
+              to={`/product/${product._id}`}
             >
               {product.description.substring(0, 50)}...
             </CardProduct.Body>

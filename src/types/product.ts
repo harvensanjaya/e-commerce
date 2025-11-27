@@ -1,5 +1,5 @@
 export interface Product {
-  _id: number;
+  _id: string;
   brand: string;
   category: string;
   condition: string;
@@ -10,6 +10,6 @@ export interface Product {
   product_name: string;
   shipping: number;
   size: string;
-  store_name:string;
+  store_name: string;
   rating: { rate: number; count: number };
 }

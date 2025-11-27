@@ -4,7 +4,10 @@ import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../hooks/reduxHooks";
-import { toggleWishlist } from "../../redux/wishlist/wishlistSlice";
+import {
+  addWishlistItem,
+  removeWishlistItem,
+} from "../../redux/wishlist/wishlistThunk";
 import type { Product } from "../../types/product";
 
 // interfaces
@@ -89,26 +92,46 @@ const Body: React.FC<BodyProps> = ({ title, children, to }) => {
 const Footer: React.FC<FooterProps> = ({ price, product }) => {
   const dispatch = useDispatch();
   const wishlistItems = useAppSelector((state) => state.wishlist.items);
+
+  // Ambil userId dari localStorage
+  const userId = localStorage.getItem("userId") ?? "";
+
+  // Cek apakah product sudah ada di wishlist
   const exists = wishlistItems.some((i) => i._id === product._id);
+
+  const handleToggleWishlist = () => {
+    if (!userId) {
+      alert("You must login first!");
+      return;
+    }
+
+    if (exists) {
+      dispatch(removeWishlistItem({ userId, productId: product._id }));
+    } else {
+      dispatch(addWishlistItem({ userId, product }));
+    }
+  };
+
+  // Format harga ke rupiah
+  const formattedPrice =
+    typeof price === "number"
+      ? price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })
+      : price;
 
   return (
     <div className="flex flex-col justify-between flex-auto">
-      <span className="text-md text-black">{price}</span>
+      <span className="text-md text-black">{formattedPrice}</span>
+
       <div className="flex justify-between">
-        <p>8 / M</p>
-        <div className="flex items-center">
-          <button
-            onClick={() => dispatch(toggleWishlist(product))}
-            className="cursor-pointer"
-          >
-            {exists ? (
-              <BsSuitHeartFill size={20} color="red" />
-            ) : (
-              <BsSuitHeart size={20} color="black" />
-            )}
-          </button>
-          <p className="ml-1 text-black">12</p>
-        </div>
+        <p>{product.size}</p>
+
+        <button onClick={handleToggleWishlist} className="cursor-pointer">
+          {exists ? (
+            <BsSuitHeartFill size={20} color="red" />
+          ) : (
+            <BsSuitHeart size={20} />
+          )}
+        </button>
       </div>
     </div>
   );
