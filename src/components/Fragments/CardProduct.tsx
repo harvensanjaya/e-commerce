@@ -101,11 +101,6 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
       state.wishlist.items.some((i) => i._id === product._id)
   );
 
-  const likesCount = useAppSelector(
-    (state) =>
-      state.wishlist.items.find((i) => i._id === product._id)?.like?.length
-  );
-
   const handleToggleWishlist = () => {
     if (!userId) {
       window.location.href = "/login";
@@ -153,7 +148,7 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
       <div className="flex justify-between">
         <p>{product.size}</p>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <button onClick={handleToggleWishlist} className="cursor-pointer">
             {exists ? (
               <BsSuitHeartFill size={20} color="red" />

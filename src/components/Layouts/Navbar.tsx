@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { BsCart3, BsChevronDown, BsSearch, BsSuitHeart } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { useNavbar } from "../../context/NavbarContext";
 import { useAppSelector } from "../../hooks/reduxHooks";
 
@@ -63,9 +63,9 @@ const Navbar = () => {
                   <p className="absolute top-1 right-2 text-white text-xs">1</p>
                 </div>
 
-                <Link
-                  className="relative h-full items-center sm:flex hidden"
-                  to={"/wishlist"}
+                <button
+                  className="relative h-full items-center sm:flex hidden cursor-pointer"
+                  onClick={() => (window.location.href = "/wishlist")}
                 >
                   <BsSuitHeart size={28} className="p-2 box-content" />
                   <FaCircle
@@ -76,7 +76,7 @@ const Navbar = () => {
                   <p className="absolute top-1 right-2 text-white text-xs">
                     {wishlistCount}
                   </p>
-                </Link>
+                </button>
               </div>
 
               <div className="flex items-center justify-between h-full gap-3 relative">
