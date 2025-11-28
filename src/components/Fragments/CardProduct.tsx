@@ -100,8 +100,7 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
 
   const handleToggleWishlist = () => {
     if (!userId) {
-      alert("You must login first!");
-      return;
+      window.location.href = "/login";
     }
 
     if (exists) {
@@ -146,10 +145,8 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
   );
 };
 
-const MemoFooter = React.memo(Footer);
-
 CardProduct.Header = Header;
 CardProduct.Body = Body;
-CardProduct.Footer = MemoFooter;
+CardProduct.Footer = Footer;
 
 export { CardProduct, CardProductEmpty };
