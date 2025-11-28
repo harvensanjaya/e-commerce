@@ -34,6 +34,7 @@ interface BodyProps {
 interface FooterProps {
   price: string | number;
   product: Product;
+  showLike?: boolean;
 }
 
 const CardProduct: React.FC<CardProductProps> & {
@@ -89,7 +90,7 @@ const Body: React.FC<BodyProps> = ({ title, children, to }) => {
   );
 };
 
-const Footer: React.FC<FooterProps> = ({ price, product }) => {
+const Footer: React.FC<FooterProps> = ({ price, product, showLike = true }) => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.auth.user?._id ?? "");
 
@@ -98,11 +99,6 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
     (state) =>
       Array.isArray(state.wishlist.items) &&
       state.wishlist.items.some((i) => i._id === product._id)
-  );
-
-  const likesCount = useAppSelector(
-    (state) =>
-      state.wishlist.items.find((i) => i._id === product._id)?.like?.length
   );
 
   const handleToggleWishlist = () => {
@@ -148,7 +144,7 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
               <BsSuitHeart size={20} />
             )}
           </button>
-          <p>{product.like.length}</p>
+          {showLike && <p>{product.like.length}</p>}
         </div>
       </div>
     </div>
