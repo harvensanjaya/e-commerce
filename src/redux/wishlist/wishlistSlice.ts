@@ -31,7 +31,7 @@ const wishlistSlice = createSlice({
     });
     builder.addCase(fetchUserWishlist.fulfilled, (state, action) => {
       state.loading = false;
-      state.items = action.payload;
+      state.items = Array.isArray(action.payload) ? action.payload : [];
     });
     builder.addCase(fetchUserWishlist.rejected, (state) => {
       state.loading = false;
@@ -40,12 +40,16 @@ const wishlistSlice = createSlice({
 
     // Add wishlist
     builder.addCase(addWishlistItem.fulfilled, (state, action) => {
-      state.items = action.payload;
+      state.items = Array.isArray(action.payload)
+        ? action.payload
+        : state.items;
     });
 
     // Remove wishlist
     builder.addCase(removeWishlistItem.fulfilled, (state, action) => {
-      state.items = action.payload;
+      state.items = Array.isArray(action.payload)
+        ? action.payload
+        : state.items;
     });
   },
 });

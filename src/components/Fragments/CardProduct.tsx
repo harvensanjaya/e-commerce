@@ -1,8 +1,8 @@
-import React from "react";
 import type { ReactNode } from "react";
+import React from "react";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 
 import {
   addWishlistItem,
@@ -94,8 +94,15 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
   const userId = useAppSelector((state) => state.auth.user?._id ?? "");
 
   // selector hanya return boolean → render minimal
-  const exists = useAppSelector((state) =>
-    state.wishlist.items.some((i) => i._id === product._id)
+  const exists = useAppSelector(
+    (state) =>
+      Array.isArray(state.wishlist.items) &&
+      state.wishlist.items.some((i) => i._id === product._id)
+  );
+
+  const likesCount = useAppSelector(
+    (state) =>
+      state.wishlist.items.find((i) => i._id === product._id)?.like?.length
   );
 
   const handleToggleWishlist = () => {
@@ -133,13 +140,16 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
       <div className="flex justify-between">
         <p>{product.size}</p>
 
-        <button onClick={handleToggleWishlist} className="cursor-pointer">
-          {exists ? (
-            <BsSuitHeartFill size={20} color="red" />
-          ) : (
-            <BsSuitHeart size={20} />
-          )}
-        </button>
+        <div className="flex items-center">
+          <button onClick={handleToggleWishlist} className="cursor-pointer">
+            {exists ? (
+              <BsSuitHeartFill size={20} color="red" />
+            ) : (
+              <BsSuitHeart size={20} />
+            )}
+          </button>
+          <p>{product.like.length}</p>
+        </div>
       </div>
     </div>
   );

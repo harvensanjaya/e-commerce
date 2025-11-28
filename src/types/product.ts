@@ -11,5 +11,5 @@ export interface Product {
   shipping: number;
   size: string;
   store_name: string;
-  rating: { rate: number; count: number };
+  like: string[];
 }

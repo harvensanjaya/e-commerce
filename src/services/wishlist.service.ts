@@ -1,7 +1,7 @@
 // services/wishlist.service.ts
 import axios from "axios";
 
-const API = "https://back-end-vintage.vercel.app/api";
+const API = import.meta.env.VITE_API_URL;
 
 export const wishlistService = {
   // POST /wishlist/{userId}/{productId}
