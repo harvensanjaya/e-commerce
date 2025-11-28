@@ -1,37 +1,56 @@
 // redux/auth/authThunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authService } from "../../services/auth.service";
+import { fetchUserWishlist } from "../wishlist/wishlistThunk";
 
 export const loginThunk = createAsyncThunk(
   "auth/login",
-  async (data: { username: string; password: string }, thunkAPI) => {
+  async (
+    data: { username: string; password: string },
+    { dispatch, rejectWithValue }
+  ) => {
     try {
+      // 1. Login → dapat token
       const result = await authService.login(data.username, data.password);
-      const token = result.data
+      const token = result.data;
 
-      localStorage.setItem("token", token)
+      localStorage.setItem("token", token);
 
-      const user = await authService.getUser(token)
+      // 2. Fetch data user
+      const user = await authService.getUser(token);
 
-      return {token, user}
+      // 3. Otomatis fetch wishlist
+      if (user?._id) {
+        dispatch(fetchUserWishlist(user._id));
+      }
+
+      // 4. Return ke reducer
+      return { token, user };
     } catch (err: any) {
       const message = err?.response?.data?.meta?.message || "Login failed.";
-      return thunkAPI.rejectWithValue(message);
+      return rejectWithValue(message);
     }
   }
 );
 
 export const fetchUserThunk = createAsyncThunk(
   "auth/me",
-  async (_, thunkAPI) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) return thunkAPI.rejectWithValue("No Token Found");
+      if (!token) return rejectWithValue("No Token Found");
 
+      // fetch user
       const user = await authService.getUser(token);
+
+      // otomatis fetch wishlist (tanpa login)
+      if (user?._id) {
+        dispatch(fetchUserWishlist(user._id));
+      }
+
       return user;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue("Failed to fetch user");
+    } catch {
+      return rejectWithValue("Failed to fetch user");
     }
   }
 );

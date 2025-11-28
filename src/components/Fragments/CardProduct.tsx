@@ -1,9 +1,9 @@
-import type React from "react";
+import React from "react";
 import type { ReactNode } from "react";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../hooks/reduxHooks";
+
 import {
   addWishlistItem,
   removeWishlistItem,
@@ -90,14 +90,13 @@ const Body: React.FC<BodyProps> = ({ title, children, to }) => {
 };
 
 const Footer: React.FC<FooterProps> = ({ price, product }) => {
-  const dispatch = useDispatch();
-  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.auth.user?._id ?? "");
 
-  // Ambil userId dari localStorage
-  const userId = localStorage.getItem("userId") ?? "";
-
-  // Cek apakah product sudah ada di wishlist
-  const exists = wishlistItems.some((i) => i._id === product._id);
+  // selector hanya return boolean → render minimal
+  const exists = useAppSelector((state) =>
+    state.wishlist.items.some((i) => i._id === product._id)
+  );
 
   const handleToggleWishlist = () => {
     if (!userId) {
@@ -106,9 +105,19 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
     }
 
     if (exists) {
-      dispatch(removeWishlistItem({ userId, productId: product._id }));
+      dispatch(
+        removeWishlistItem({
+          userId,
+          productId: product._id,
+        })
+      );
     } else {
-      dispatch(addWishlistItem({ userId, product }));
+      dispatch(
+        addWishlistItem({
+          userId,
+          productId: product._id,
+        })
+      );
     }
   };
 
@@ -137,8 +146,10 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
   );
 };
 
+const MemoFooter = React.memo(Footer);
+
 CardProduct.Header = Header;
 CardProduct.Body = Body;
-CardProduct.Footer = Footer;
+CardProduct.Footer = MemoFooter;
 
 export { CardProduct, CardProductEmpty };

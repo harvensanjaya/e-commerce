@@ -40,13 +40,12 @@ const wishlistSlice = createSlice({
 
     // Add wishlist
     builder.addCase(addWishlistItem.fulfilled, (state, action) => {
-      const exists = state.items.some((i) => i._id === action.payload._id);
-      if (!exists) state.items.push(action.payload);
+      state.items = action.payload;
     });
 
     // Remove wishlist
     builder.addCase(removeWishlistItem.fulfilled, (state, action) => {
-      state.items = state.items.filter((i) => i._id !== action.payload);
+      state.items = action.payload;
     });
   },
 });

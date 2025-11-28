@@ -1,14 +1,13 @@
 // redux/wishlist/wishlistThunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { wishlistService } from "../../services/wishlist.service";
-import type { Product } from "../../types/product";
 
 // Ambil wishlist user
 export const fetchUserWishlist = createAsyncThunk(
   "wishlist/fetchUserWishlist",
   async (userId: string) => {
-    const response = await wishlistService.getUserWishlist(userId);
-    return response.data; // pastikan backend kirim array product
+    const products = await wishlistService.getUserWishlist(userId);
+    return products; 
   }
 );
 
@@ -16,12 +15,12 @@ export const fetchUserWishlist = createAsyncThunk(
 export const addWishlistItem = createAsyncThunk(
   "wishlist/addWishlistItem",
   async (
-    { userId, product }: { userId: string; product: Product },
+    { userId, productId }: { userId: string; productId: string},
     { rejectWithValue }
   ) => {
     try {
-      await wishlistService.addWishlist(userId, product._id);
-      return product;
+      const data = await wishlistService.addWishlist(userId, productId);
+      return data.products;
     } catch (err) {
       return rejectWithValue("Failed to add wishlist");
     }
@@ -36,8 +35,8 @@ export const removeWishlistItem = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      await wishlistService.removeWishlist(userId, productId);
-      return productId;
+      const data = await wishlistService.removeWishlist(userId, productId);
+      return data.products;
     } catch (err) {
       return rejectWithValue("Failed to remove wishlist");
     }

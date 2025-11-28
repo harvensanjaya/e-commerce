@@ -24,7 +24,7 @@ const Wishlist = () => {
         </h1>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-6harga gap-5 w-4/5 self-center">
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-5 w-4/5 self-center">
         {wishlistItems.length === 0 && (
           <p className="text-gray-500 text-lg">
             You don’t have any wishlist yet.
@@ -34,16 +34,18 @@ const Wishlist = () => {
         {wishlistItems.map((product) => (
           <CardProduct key={product._id}>
             <CardProduct.Header
-              image={product.images[0]}
+              image={product.images?.[0]}
               to={`/product/${product._id}`}
             />
             <CardProduct.Body
               title={product.product_name}
               to={`/product/${product._id}`}
             >
-              {product.description.substring(0, 50)}...
+              {product.description
+                ? `${product.description.substring(0, 50)}...`
+                : ""}
             </CardProduct.Body>
-            <CardProduct.Footer price={`$${product.price}`} product={product} />
+            <CardProduct.Footer price={product.price} product={product} />
           </CardProduct>
         ))}
       </div>
