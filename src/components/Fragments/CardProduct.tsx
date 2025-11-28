@@ -4,6 +4,7 @@ import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 
+import { updateProductLike } from "../../redux/product/productSlice";
 import {
   addWishlistItem,
   removeWishlistItem,
@@ -117,11 +118,23 @@ const Footer: React.FC<FooterProps> = ({ price, product }) => {
           productId: product._id,
         })
       );
+      dispatch(
+        updateProductLike({
+          productId: product._id,
+          like: product.like.filter((id) => id !== userId),
+        })
+      );
     } else {
       dispatch(
         addWishlistItem({
           userId,
           productId: product._id,
+        })
+      );
+      dispatch(
+        updateProductLike({
+          productId: product._id,
+          like: [...product.like, userId],
         })
       );
     }

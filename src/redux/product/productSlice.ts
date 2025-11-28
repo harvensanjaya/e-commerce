@@ -1,5 +1,5 @@
 // redux/product/productSlice.ts
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Product } from "../../types/product";
 import { fetchProductById, fetchProducts } from "./productThunks";
 
@@ -26,7 +26,18 @@ const initialState: ProductState = {
 export const productSlice = createSlice({
   name: "product",
   initialState,
-  reducers: {},
+  reducers: {
+    updateProductLike: (
+      state,
+      action: PayloadAction<{ productId: string; like: string[] }>
+    ) => {
+      const { productId, like } = action.payload;
+      const product = state.items.find((p) => p._id === productId);
+      if (product) {
+        product.like = like;
+      }
+    },
+  },
   extraReducers: (builder) => {
     // 🔥 Fetch all products
     builder.addCase(fetchProducts.pending, (state) => {
@@ -59,4 +70,5 @@ export const productSlice = createSlice({
   },
 });
 
+export const { updateProductLike } = productSlice.actions;
 export default productSlice.reducer;
