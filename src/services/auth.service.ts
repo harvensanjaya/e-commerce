@@ -1,11 +1,9 @@
 // services/authService.ts
-import axios from "axios";
-
-const API = import.meta.env.VITE_API_URL;
+import api from "./api";
 
 export const authService = {
   login: async (identifier: string, password: string) => {
-    const response = await axios.post(`${API}/auth/login`, {
+    const response = await api.post(`/auth/login`, {
       identifier,
       password,
     });
@@ -14,7 +12,7 @@ export const authService = {
 
   getUser: async (token: string) => {
     try {
-      const response = await axios.get(`${API}/auth/me`, {
+      const response = await api.get(`/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +32,7 @@ export const authService = {
     password: string,
     confirmPassword: string
   ) => {
-    const response = await axios.post(`${API}/auth/register`, {
+    const response = await api.post(`/auth/register`, {
       fullName,
       username,
       email,
