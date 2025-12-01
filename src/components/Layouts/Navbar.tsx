@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BsCart3, BsChevronDown, BsSearch, BsSuitHeart } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavbar } from "../../context/NavbarContext";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { logout } from "../../redux/auth/authSlice";
 
 import logo from "../../assets/logo.png";
 import Button from "../Elements/Button";
@@ -14,22 +15,18 @@ import ProfileDropdown from "../Fragments/ProfileDropdown";
 const Navbar = () => {
   const { isShow } = useNavbar();
   const wishlistCount = useAppSelector((state) => state.wishlist.items.length);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
-  const [token, setToken] = useState<string | null>(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
 
   const goLogin = () => (window.location.href = "/login");
 
   const goRegister = () => (window.location.href = "/register");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+    dispatch(logout());
     window.location.href = "/";
   };
 
@@ -50,7 +47,7 @@ const Navbar = () => {
               className="border-0 sm:text-base text-sm focus:border-0 focus:outline-0 transition-all transition-discrete"
             />
           </div>
-          {token ? (
+          {isAuthenticated ? (
             <div className="flex gap-7 items-center h-full justify-between">
               <div className="flex items-center h-full justify-between ">
                 <div className="relative h-full items-center sm:flex hidden">
