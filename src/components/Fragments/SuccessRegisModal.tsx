@@ -1,8 +1,8 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { AnimatePresence, motion } from "motion/react";
+import { useNavigate } from "react-router-dom";
 import planeAnimation from "../../assets/MessageSentSuccessfully_Plane.lottie";
 import Button from "../Elements/Button";
-import { useNavigate } from "react-router-dom";
 
 interface SuccessRegisModalProps {
   isOpen?: boolean;
