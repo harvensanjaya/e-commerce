@@ -14,6 +14,7 @@ import Products from "./pages/Products";
 import ProfilePage from "./pages/Profile";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
+import { logout } from "./redux/auth/authSlice";
 import { fetchUserThunk } from "./redux/auth/authThunks";
 import { fetchProducts } from "./redux/product/productThunks";
 
@@ -121,6 +122,8 @@ const App = () => {
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(fetchUserThunk());
+    } else {
+      dispatch(logout());
     }
   }, []);
 

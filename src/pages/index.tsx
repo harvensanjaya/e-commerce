@@ -3,7 +3,10 @@ import { BsSearch } from "react-icons/bs";
 import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
+import errorIcon from "../assets/404 error page with cat.lottie";
+import loadingIcon from "../assets/Loader cat.lottie";
 import Button from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
@@ -21,7 +24,17 @@ const Home = () => {
     loading,
     error,
   } = useAppSelector((state) => state.product);
+
   const brands = [...new Set(products.map((p) => p.brand))];
+  const popularProducts = [...products].sort(
+    (a, b) => b.like.length - a.like.length
+  );
+
+  const newProducts = [...products].sort(
+    (a, b) =>
+      new Date(b.createdAt || 0).getTime() -
+      new Date(a.createdAt || 0).getTime()
+  );
 
   const toSlug = (str: string) =>
     str
@@ -47,22 +60,6 @@ const Home = () => {
   useEffect(() => {
     setIsShow(true);
   }, []);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center mt-20 text-xl">
-        Loading products...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center mt-20 text-red-500 text-xl">
-        {error}
-      </div>
-    );
-  }
 
   return (
     <div className="font-poppins">
@@ -102,30 +99,61 @@ const Home = () => {
         </div>
       </div>
 
-      <SectionProduct title="Popular Items" products={products} />
-
-      <div className="flex flex-col gap-2 py-5 items-center">
-        <div className="flex w-4/5 self-center">
-          <h1 className="text-3xl pt-10 pb-5 font-medium">Shop by Brand</h1>
+      {loading && (
+        <div className="w-4/5 items-center mx-auto justify-center relative">
+          <div className="p-4 bg-slate-900 rounded-full absolute top-1/2 left-1/2 text-white h-fit">
+            Products Loading...
+          </div>
+          <DotLottieReact
+            src={loadingIcon}
+            loop
+            autoplay
+            className="w-3/5 mx-auto"
+          />
         </div>
-
-        <div className="flex gap-5 w-4/5 flex-wrap">
-          {brands.map((brand) => {
-            const slug = toSlug(brand);
-            return (
-              <Link
-                key={brand}
-                className="bg-white border border-black p-2 rounded-lg text-sm hover:bg-slate-700 hover:text-white transition-all transition-discrete"
-                to={`/products/${slug}`}
-              >
-                {brand}
-              </Link>
-            );
-          })}
+      )}
+      {error && (
+        <div className="w-4/5 items-center mx-auto justify-center relative">
+          <div className="p-4 bg-slate-900 rounded-full absolute top-1/2 left-1/2 text-white h-fit">
+            Products Not Found
+          </div>
+          <DotLottieReact
+            src={errorIcon}
+            loop
+            autoplay
+            className="w-3/5 mx-auto"
+          />
         </div>
-      </div>
+      )}
+      {!loading && !error && (
+        <>
+          <SectionProduct title="Popular Items" products={popularProducts} />
 
-      <SectionProduct title="New Product" products={products} />
+          <div className="flex flex-col gap-2 py-5 items-center">
+            <div className="flex w-4/5 self-center">
+              <h1 className="text-3xl pt-10 pb-5 font-medium">Shop by Brand</h1>
+            </div>
+
+            <div className="flex gap-5 w-4/5 flex-wrap">
+              {brands.map((brand) => {
+                const slug = toSlug(brand);
+                return (
+                  <Link
+                    key={brand}
+                    className="bg-white border border-black p-2 rounded-lg text-sm hover:bg-slate-700 hover:text-white transition-all transition-discrete"
+                    to={`/products/${slug}`}
+                  >
+                    {brand}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <SectionProduct title="New Product" products={newProducts} />
+        </>
+      )}
+
       <Footer />
     </div>
   );

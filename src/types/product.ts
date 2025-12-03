@@ -12,4 +12,5 @@ export interface Product {
   size: string;
   store_name: string;
   like: string[];
+  createdAt: string;
 }

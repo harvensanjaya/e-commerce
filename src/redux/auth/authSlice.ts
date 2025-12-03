@@ -14,12 +14,23 @@ interface AuthState {
 
 const tokenFromStorage = localStorage.getItem("token");
 
+let userFromStorage = null;
+
+if (tokenFromStorage) {
+  try {
+    userFromStorage = jwtDecode(tokenFromStorage);
+  } catch (error) {
+    console.log(error);
+    localStorage.removeItem("token");
+  }
+}
+
 const initialState: AuthState = {
   token: tokenFromStorage,
   user: tokenFromStorage ? jwtDecode(tokenFromStorage) : null,
   loading: false,
   error: null,
-  isAuthenticated: !!tokenFromStorage,
+  isAuthenticated: !!userFromStorage,
   justLoggedIn: false,
   justRegistered: false,
 };
@@ -82,16 +93,18 @@ const authSlice = createSlice({
       });
 
     builder
-    .addCase(registerThunk.pending, (state) => {
+      .addCase(registerThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
-    }).addCase(registerThunk.fulfilled, (state) => {
+      })
+      .addCase(registerThunk.fulfilled, (state) => {
         state.loading = false;
         state.justRegistered = true;
-    }).addCase(registerThunk.rejected, (state, action) => {
+      })
+      .addCase(registerThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string
-    })
+        state.error = action.payload as string;
+      });
   },
 });
 

@@ -1,7 +1,8 @@
+import { motion } from "motion/react";
 import { useState } from "react";
 import { BsCart3, BsChevronDown, BsSearch, BsSuitHeart } from "react-icons/bs";
 import { FaCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useNavbar } from "../../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { logout } from "../../redux/auth/authSlice";
@@ -17,21 +18,27 @@ const Navbar = () => {
   const wishlistCount = useAppSelector((state) => state.wishlist.items.length);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const goLogin = () => (window.location.href = "/login");
+  const goLogin = () => navigate("/login");
 
-  const goRegister = () => (window.location.href = "/register");
+  const goRegister = () => navigate("/register");
 
   const handleLogout = () => {
     dispatch(logout());
-    window.location.href = "/";
+    navigate("/");
   };
 
   return (
-    <div className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete">
+    <motion.div
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete"
+    >
       {isShow ? (
         <div className="flex justify-between w-4/5 sm:h-1/2 h-2/5 items-center gap-6 transition-all transition-discrete">
           <Link to={"/"} className="h-full">
@@ -62,7 +69,7 @@ const Navbar = () => {
 
                 <button
                   className="relative h-full items-center sm:flex hidden cursor-pointer"
-                  onClick={() => (window.location.href = "/wishlist")}
+                  onClick={() => navigate("/wishlist")}
                 >
                   <BsSuitHeart size={28} className="p-2 box-content" />
                   <FaCircle
@@ -143,7 +150,7 @@ const Navbar = () => {
         onClose={() => setShowLogoutModal(false)}
         onConfirm={() => handleLogout()}
       />
-    </div>
+    </motion.div>
   );
 };
 
