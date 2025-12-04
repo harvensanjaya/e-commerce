@@ -1,157 +1,163 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
+
 import errorIcon from "../assets/404 error page with cat.lottie";
 import loadingIcon from "../assets/Loader cat.lottie";
+
 import Button from "../components/Elements/Button";
 import { Input } from "../components/Elements/Input";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
-import SectionProduct from "../components/Layouts/SectionProduct";
+
 import { hideModal, showModal } from "../redux/modal/modalSlice";
+
+/* ✅ LAZY LOAD SECTION */
+const SectionProduct = lazy(
+  () => import("../components/Layouts/SectionProduct")
+);
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const { setIsShow } = useNavbar();
-  const { user, justLoggedIn } = useAppSelector((state) => state.auth);
 
+  const { user, justLoggedIn } = useAppSelector((state) => state.auth);
   const {
     items: products,
     loading,
     error,
   } = useAppSelector((state) => state.product);
 
-  const brands = [...new Set(products.map((p) => p.brand))];
-  const popularProducts = [...products].sort(
-    (a, b) => b.like.length - a.like.length
+  /* ✅ MEMOIZED */
+  const brands = useMemo(
+    () => [...new Set(products.map((p) => p.brand))],
+    [products]
   );
 
-  const newProducts = [...products].sort(
-    (a, b) =>
-      new Date(b.createdAt || 0).getTime() -
-      new Date(a.createdAt || 0).getTime()
+  const popularProducts = useMemo(
+    () => [...products].sort((a, b) => b.like.length - a.like.length),
+    [products]
+  );
+
+  const newProducts = useMemo(
+    () =>
+      [...products].sort(
+        (a, b) =>
+          new Date(b.createdAt || 0).getTime() -
+          new Date(a.createdAt || 0).getTime()
+      ),
+    [products]
   );
 
   const toSlug = (str: string) =>
     str
       .toLowerCase()
-      .replaceAll(/[^a-z0-9]+/g, "-") // convert spaces & symbols → "-"
-      .replaceAll(/^-+|-+$/g, "");
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
   const goLogin = () => (window.location.href = "/login");
 
-  useEffect(() => {
-    if (justLoggedIn && user) {
-      dispatch(showModal(`Authenticated as ${user.fullName}`));
-
-      setTimeout(() => {
-        dispatch(hideModal());
-      }, 2500);
-
-      // reset flag supaya tidak muncul lagi
-      dispatch({ type: "auth/clearLoginState" });
-    }
-  }, [justLoggedIn]);
+  useEffect(() => setIsShow(true), [setIsShow]);
 
   useEffect(() => {
-    setIsShow(true);
-  }, []);
+    if (!justLoggedIn || !user) return;
+
+    dispatch(showModal(`Authenticated as ${user.fullName}`));
+
+    const timer = setTimeout(() => dispatch(hideModal()), 2500);
+
+    dispatch({ type: "auth/clearLoginState" });
+
+    return () => clearTimeout(timer);
+  }, [justLoggedIn, user, dispatch]);
 
   return (
     <div className="font-poppins">
       <Navbar />
 
-      <div className="flex lg:hidden flex-col gap-2 py-5 items-center mt-20 transition-all">
-        <div className="flex w-4/5 self-center">
-          {/* <h1 className='text-3xl pt-10 pb-5 font-medium'>Shop by Brand</h1> */}
-          <div className="flex bg-slate-100 rounded-xl border border-slate-400 items-center grow px-3 gap-3 w-2/4">
+      {/* MOBILE SEARCH */}
+      <div className="flex lg:hidden flex-col gap-2 py-5 mt-20 items-center">
+        <div className="flex w-4/5">
+          <div className="flex bg-slate-100 rounded-xl border border-slate-400 items-center grow px-3 gap-3">
             <BsSearch />
             <Input
               type="text"
               placeholder="Search for items"
-              name="search"
               className="border-0 sm:text-lg text-sm"
             />
           </div>
         </div>
       </div>
 
-      <div className="flex relative lg:mt-20 transition-all tranition-discrete">
+      {/* HERO */}
+      <div className="relative lg:mt-20">
         <img
           src="https://images.pexels.com/photos/8311891/pexels-photo-8311891.jpeg"
-          alt=""
-          className="w-full h-[40vh] md:h-[50vh] lg:h-[70vh] xl:h-[85vh] object-center object-cover transition-all transition-discrete"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-[40vh] md:h-[50vh] lg:h-[70vh] xl:h-[85vh] object-cover"
         />
-        <div className="absolute bg-white text-center p-5 rounded-xl top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 lg:w-[20%] w-[40%] hidden md:flex flex-col transition-all transition-discrete">
-          <h1 className="lg:text-4xl md:text-3xl mb-5 text-left transition-all">
-            Ready to declutter you closet?
+
+        <div className="hidden md:flex absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 bg-white w-[40%] lg:w-[20%] p-5 rounded-xl flex-col">
+          <h1 className="lg:text-4xl md:text-3xl mb-5 text-left">
+            Ready to declutter your closet?
           </h1>
-          <Button
-            className="bg-slate-500 text-white w-full"
-            onClick={() => goLogin()}
-          >
+          <Button className="bg-slate-500 text-white w-full" onClick={goLogin}>
             Shop Now
           </Button>
         </div>
       </div>
 
+      {/* LOADING */}
       {loading && (
-        <div className="w-4/5 items-center mx-auto justify-center relative">
-          <div className="p-4 bg-slate-900 rounded-full absolute top-1/2 left-1/2 text-white h-fit">
+        <div className="w-4/5 mx-auto relative text-center">
+          <div className="p-4 bg-slate-900 text-white rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             Products Loading...
           </div>
-          <DotLottieReact
-            src={loadingIcon}
-            loop
-            autoplay
-            className="w-3/5 mx-auto"
-          />
+          <DotLottieReact src={loadingIcon} autoplay speed={0.75} />
         </div>
       )}
-      {error && (
-        <div className="w-4/5 items-center mx-auto justify-center relative">
-          <div className="p-4 bg-slate-900 rounded-full absolute top-1/2 left-1/2 text-white h-fit">
+
+      {/* ERROR */}
+      {!loading && error && (
+        <div className="w-4/5 mx-auto relative text-center">
+          <div className="p-4 bg-slate-900 text-white rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             Products Not Found
           </div>
-          <DotLottieReact
-            src={errorIcon}
-            loop
-            autoplay
-            className="w-3/5 mx-auto"
-          />
+          <DotLottieReact src={errorIcon} autoplay speed={0.75} />
         </div>
       )}
+
+      {/* PRODUCTS ✅ LAZY LOAD */}
       {!loading && !error && (
-        <>
+        <Suspense fallback={<p className="text-center my-10">Loading UI…</p>}>
           <SectionProduct title="Popular Items" products={popularProducts} />
 
+          {/* BRAND */}
           <div className="flex flex-col gap-2 py-5 items-center">
-            <div className="flex w-4/5 self-center">
+            <div className="flex w-4/5">
               <h1 className="text-3xl pt-10 pb-5 font-medium">Shop by Brand</h1>
             </div>
 
             <div className="flex gap-5 w-4/5 flex-wrap">
-              {brands.map((brand) => {
-                const slug = toSlug(brand);
-                return (
-                  <Link
-                    key={brand}
-                    className="bg-white border border-black p-2 rounded-lg text-sm hover:bg-slate-700 hover:text-white transition-all transition-discrete"
-                    to={`/products/${slug}`}
-                  >
-                    {brand}
-                  </Link>
-                );
-              })}
+              {brands.map((brand) => (
+                <Link
+                  key={brand}
+                  to={`/products/${toSlug(brand)}`}
+                  className="border border-black bg-white hover:bg-slate-700 hover:text-white transition px-3 py-2 rounded-md"
+                >
+                  {brand}
+                </Link>
+              ))}
             </div>
           </div>
 
           <SectionProduct title="New Product" products={newProducts} />
-        </>
+        </Suspense>
       )}
 
       <Footer />
