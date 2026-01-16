@@ -1,10 +1,10 @@
-import { useEffect, useMemo, lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavbar } from "../context/NavbarContext";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchProductsSort } from "../redux/product/productThunks";
 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Link } from "react-router-dom";
 
 import errorIcon from "../assets/404 error page with cat.lottie";
 import loadingIcon from "../assets/Loader cat.lottie";
@@ -26,38 +26,10 @@ const Home = () => {
   const { setIsShow } = useNavbar();
 
   const { user, justLoggedIn } = useAppSelector((state) => state.auth);
-  const {
-    items: products,
-    loading,
-    error,
-  } = useAppSelector((state) => state.product);
-
-  /* ✅ MEMOIZED */
-  const brands = useMemo(
-    () => [...new Set(products.map((p) => p.brand))],
-    [products]
+  const { popular, newest, loadingCount, error } = useAppSelector(
+    (state) => state.product
   );
-
-  const popularProducts = useMemo(
-    () => [...products].sort((a, b) => b.like.length - a.like.length),
-    [products]
-  );
-
-  const newProducts = useMemo(
-    () =>
-      [...products].sort(
-        (a, b) =>
-          new Date(b.createdAt || 0).getTime() -
-          new Date(a.createdAt || 0).getTime()
-      ),
-    [products]
-  );
-
-  const toSlug = (str: string) =>
-    str
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+  const loading = loadingCount > 0;
 
   const goLogin = () => (window.location.href = "/login");
 
@@ -74,6 +46,11 @@ const Home = () => {
 
     return () => clearTimeout(timer);
   }, [justLoggedIn, user, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchProductsSort({ type: "like", orderBy: "descending" }));
+    dispatch(fetchProductsSort({ type: "date", orderBy: "descending" }));
+  }, [dispatch]);
 
   return (
     <div className="font-poppins">
@@ -134,8 +111,17 @@ const Home = () => {
 
       {/* PRODUCTS ✅ LAZY LOAD */}
       {!loading && !error && (
-        <Suspense fallback={<p className="text-center my-10">Loading UI…</p>}>
-          <SectionProduct title="Popular Items" products={popularProducts} />
+        <Suspense
+          fallback={
+            <div className="w-4/5 mx-auto relative text-center">
+              <div className="p-4 bg-slate-900 text-white rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                Loading Data...
+              </div>
+              <DotLottieReact src={loadingIcon} autoplay speed={0.75} />
+            </div>
+          }
+        >
+          <SectionProduct title="Popular Items" products={popular} />
 
           {/* BRAND */}
           <div className="flex flex-col gap-2 py-5 items-center">
@@ -144,7 +130,7 @@ const Home = () => {
             </div>
 
             <div className="flex gap-5 w-4/5 flex-wrap">
-              {brands.map((brand) => (
+              {/* {brands.map((brand) => (
                 <Link
                   key={brand}
                   to={`/products/${toSlug(brand)}`}
@@ -152,11 +138,11 @@ const Home = () => {
                 >
                   {brand}
                 </Link>
-              ))}
+              ))} */}
             </div>
           </div>
 
-          <SectionProduct title="New Product" products={newProducts} />
+          <SectionProduct title="New Product" products={newest} />
         </Suspense>
       )}
 

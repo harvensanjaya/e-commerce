@@ -13,4 +13,6 @@ export interface Product {
   store_name: string;
   like: string[];
   createdAt: string;
+  items: string[];
+  productId: string[];
 }

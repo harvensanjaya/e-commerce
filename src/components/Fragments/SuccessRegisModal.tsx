@@ -8,7 +8,9 @@ interface SuccessRegisModalProps {
   isOpen?: boolean;
 }
 
-function SuccessRegisModal({ isOpen = true }: SuccessRegisModalProps) {
+function SuccessRegisModal({
+  isOpen = true,
+}: Readonly<SuccessRegisModalProps>) {
   const navigate = useNavigate();
 
   return (

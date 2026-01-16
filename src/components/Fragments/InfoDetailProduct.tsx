@@ -1,50 +1,71 @@
 import { useEffect } from "react";
-import {
-  Bs0CircleFill,
-  BsHeart,
-  // BsStar,
-  // BsStarFill,
-  // BsStarHalf,
-} from "react-icons/bs";
+import { Bs0CircleFill, BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { useNavbar } from "../../context/NavbarContext";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { updateProductLike } from "../../redux/product/productSlice";
+import {
+  addWishlistItem,
+  removeWishlistItem,
+} from "../../redux/wishlist/wishlistThunk";
 import type { Product } from "../../types/product";
 import Button from "../Elements/Button";
 
 interface InfoDetailProductProps {
   onConfirm: () => void;
   className?: string;
-  product?: Product;
+  product: Product;
 }
 
 function InfoDetailProduct({
   onConfirm,
   className,
   product,
-}: InfoDetailProductProps) {
+}: Readonly<InfoDetailProductProps>) {
   const { setIsShow } = useNavbar();
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.auth.user?._id ?? "");
+  const navigate = useNavigate();
 
-  // untuk rating fitur
-  // const renderStar = (rating: number = 0) => {
-  //   const star = [];
+  const exists = useAppSelector(
+    (state) =>
+      Array.isArray(state.wishlist.items) &&
+      state.wishlist.items.some((i) => i._id === product?._id)
+  );
 
-  //   const fullStar = Math.floor(rating);
-  //   const halfStar = rating % 1 >= 0.5;
-  //   const emptyStar = 5 - fullStar - (halfStar ? 1 : 0);
+  const handleToggleWishlist = () => {
+    if (!userId) {
+      navigate("/login");
+    }
 
-  //   for (let i = 0; i < fullStar; i++) {
-  //     star.push(<BsStarFill size={12} />);
-  //   }
-
-  //   if (halfStar) {
-  //     star.push(<BsStarHalf size={12} />);
-  //   }
-
-  //   for (let i = 0; i < emptyStar; i++) {
-  //     star.push(<BsStar size={12} />);
-  //   }
-
-  //   return star;
-  // };
+    if (exists) {
+      dispatch(
+        removeWishlistItem({
+          userId,
+          productId: product._id,
+        })
+      );
+      dispatch(
+        updateProductLike({
+          productId: product._id,
+          like: product.like.filter((id) => id !== userId),
+        })
+      );
+    } else {
+      dispatch(
+        addWishlistItem({
+          userId,
+          productId: product._id,
+        })
+      );
+      dispatch(
+        updateProductLike({
+          productId: product._id,
+          like: [...product.like, userId],
+        })
+      );
+    }
+  };
 
   const formatRupiah = (value: number = 0) => {
     return new Intl.NumberFormat("id-ID", {
@@ -57,6 +78,7 @@ function InfoDetailProduct({
   useEffect(() => {
     setIsShow(true);
   }, []);
+
   return (
     <div
       className={`flex flex-col p-5 rounded-md w-full border border-slate-400 flex-1 mt-10 lg:mt-0 font-poppins ${className}`}
@@ -66,7 +88,16 @@ function InfoDetailProduct({
           <h1 className="sm:text-3xl xs:text-2xl text-xl font-bold transition-all">
             {formatRupiah(product?.price)}
           </h1>
-          <BsHeart className="sm:text-2xl text-xl transition-all" />
+          <button onClick={handleToggleWishlist} className="cursor-pointer">
+            {exists ? (
+              <BsSuitHeartFill
+                color="red"
+                className="sm:text-2xl text-xl transition-all"
+              />
+            ) : (
+              <BsSuitHeart className="sm:text-2xl text-xl transition-all" />
+            )}
+          </button>
         </div>
         <p className="sm:text-xl text-base transition-all">
           {product?.product_name}

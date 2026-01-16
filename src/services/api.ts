@@ -22,7 +22,7 @@ api.interceptors.response.use(
       message?.toLowerCase().includes("jwt") ||
       message?.toLowerCase().includes("expired");
 
-    if (status === 500 || isJwtExpired) {
+    if (status === 401 || isJwtExpired) {
       localStorage.removeItem("token");
 
       store.dispatch(logout());

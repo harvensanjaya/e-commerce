@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useNavbar } from "../../context/NavbarContext";
 import Button from "../Elements/Button";
 
@@ -8,6 +9,7 @@ interface DetailSummaryProps {
 
 function DetailSummary({ className }: DetailSummaryProps) {
   const { setIsLogin, setIsShow } = useNavbar();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLogin(true);
@@ -39,7 +41,12 @@ function DetailSummary({ className }: DetailSummaryProps) {
           </p>
         </div>
       </div>
-      <Button className="bg-slate-500 text-white w-full mt-5">Check Out</Button>
+      <Button
+        className="bg-slate-500 text-white w-full mt-5"
+        onClick={() => navigate("/order")}
+      >
+        Check Out
+      </Button>
     </div>
   );
 }

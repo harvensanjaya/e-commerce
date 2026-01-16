@@ -36,7 +36,7 @@ const Navbar = () => {
     <motion.div
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
       className="font-poppins flex justify-center sm:h-20 h-18 text-black items-center fixed w-full top-0 bg-white z-10 border-b border-slate-300 transition-all transition-discrete"
     >
       {isShow ? (
@@ -57,7 +57,10 @@ const Navbar = () => {
           {isAuthenticated ? (
             <div className="flex gap-7 items-center h-full justify-between">
               <div className="flex items-center h-full justify-between ">
-                <div className="relative h-full items-center sm:flex hidden">
+                <button
+                  className="relative h-full items-center sm:flex hidden cursor-pointer"
+                  onClick={() => navigate("/cart")}
+                >
                   <BsCart3 size={30} className="p-2 box-content" />
                   <FaCircle
                     size={22}
@@ -65,7 +68,7 @@ const Navbar = () => {
                     color="red"
                   />
                   <p className="absolute top-1 right-2 text-white text-xs">1</p>
-                </div>
+                </button>
 
                 <button
                   className="relative h-full items-center sm:flex hidden cursor-pointer"

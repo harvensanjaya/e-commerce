@@ -1,7 +1,12 @@
 // redux/product/productThunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllProducts,fetchProductByIdServices } from "../../services/product.service";
+import { productService } from "../../services/product.service";
 import type { ProductState } from "./productSlice";
+
+interface FetchSortPayload {
+  type: "like" | "date";
+  orderBy: "ascending" | "descending";
+}
 
 // 🔥 Fetch semua produk (dengan caching 5 menit)
 export const fetchProducts = createAsyncThunk(
@@ -19,8 +24,17 @@ export const fetchProducts = createAsyncThunk(
       return state.product.items;
     }
 
-    const response = await getAllProducts();
-    return response;
+    const data = await productService.getAllProducts();
+    return data;
+  }
+);
+
+// 🔥 Fetch produk berdasarkan sorting
+export const fetchProductsSort = createAsyncThunk(
+  "product/fetchSort",
+  async ({ type, orderBy }: FetchSortPayload) => {
+    const data = await productService.getProductsSort(type, orderBy);
+    return data;
   }
 );
 
@@ -28,7 +42,7 @@ export const fetchProducts = createAsyncThunk(
 export const fetchProductById = createAsyncThunk(
   "product/fetchById",
   async (id: string) => {
-    const response = await fetchProductByIdServices(id)
-    return response.data
+    const data = await productService.getProductById(id);
+    return data;
   }
 );

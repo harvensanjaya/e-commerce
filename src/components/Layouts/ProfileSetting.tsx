@@ -1,8 +1,11 @@
 import { IoTrash } from "react-icons/io5";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import Button from "../Elements/Button";
 import { InputForm } from "../Elements/Input";
 
 function ProfileSetting() {
+  const { user } = useAppSelector((state) => state.auth);
+
   return (
     <div className="bg-white col-span-9 rounded-lg">
       <div className="flex flex-col w-full mb-5 transition-all bg-white p-6 rounded-md gap-2">
@@ -15,7 +18,10 @@ function ProfileSetting() {
           </div>
           <div className="flex sm:flex-row flex-col justify-between sm:items-center items-start 2xl:col-span-5 xl:col-span-6 col-span-7 gap-5 transition-all transition-discrete mt-2">
             <img
-              src="https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000"
+              src={
+                user?.profilePicture ||
+                "https://png.pngtree.com/png-vector/20191110/ourmid/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg"
+              }
               alt=""
               className="h-15 aspect-square rounded-full object-cover"
             />
@@ -29,7 +35,7 @@ function ProfileSetting() {
         <InputForm
           label="Fullname"
           type="text"
-          value="Jack Daniel"
+          value={user?.fullName}
           name="fullname"
           className="w-auto sm:text-lg text-sm rounded-lg border-gray-300 focus:border-black transition-all transition-discrete "
           labelClassName="sm:text-lg text-base transition-all transition-discrete"
@@ -37,7 +43,7 @@ function ProfileSetting() {
         <InputForm
           label="Username"
           type="text"
-          value="jackdaniel"
+          value={user?.username}
           name="username"
           className="w-auto sm:text-lg text-sm rounded-lg border-gray-300 focus:border-black transition-all transition-discrete"
           labelClassName="sm:text-lg text-base transition-all transition-discrete"
@@ -45,7 +51,7 @@ function ProfileSetting() {
         <InputForm
           label="Email"
           type="text"
-          value="jack@gmail.com"
+          value={user?.email}
           name="email"
           className="w-auto sm:text-lg text-sm rounded-lg border-gray-300 focus:border-black"
           labelClassName="sm:text-lg text-base transition-all transition-discrete"

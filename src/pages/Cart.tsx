@@ -1,9 +1,20 @@
+import { useEffect } from "react";
 import { FiMapPin } from "react-icons/fi";
 import DetailSummary from "../components/Fragments/DetailSummary";
 import Footer from "../components/Layouts/Footer";
 import Navbar from "../components/Layouts/Navbar";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchUserCart } from "../redux/cart/cartThunks";
 
 function CartPage() {
+  const dispatch = useAppDispatch();
+  const carts = useAppSelector((state) => state.cart.items);
+  const userId = useAppSelector((state) => state.auth.user?._id ?? "");
+
+  useEffect(() => {
+    if (!userId) return;
+    dispatch(fetchUserCart(userId));
+  }, [dispatch, userId]);
   return (
     <div className="">
       <Navbar />
@@ -25,114 +36,49 @@ function CartPage() {
                 Shiping to <span className="font-bold">Kuta, Badung</span>
               </p>
             </div>
-            <div className="flex flex-col gap-3  w-full p-4 rounded-md bg-white mb-2">
-              <div className="flex gap-4">
-                <img
-                  src="https://images.pexels.com/photos/1868566/pexels-photo-1868566.jpeg"
-                  alt=""
-                  className="sm:w-30 w-20 aspect-square object-cover"
-                />
-                <div className="flex flex-col justify-between">
-                  <div className="flex flex-col">
-                    <h4 className="sm:text-lg text-sm font-medium transition-all transition-discrete">
-                      White Crewneck
-                    </h4>
-                    <p>8 / M</p>
+            {carts.map((cart) =>
+              cart.items.map((item) => (
+                <div
+                  className="flex flex-col gap-3  w-full p-4 rounded-md bg-white mb-2"
+                  key={item.productId._id}
+                >
+                  <div className="flex gap-4">
+                    <img
+                      src="https://images.pexels.com/photos/1868566/pexels-photo-1868566.jpeg"
+                      alt=""
+                      className="sm:w-30 w-20 aspect-square object-cover"
+                    />
+                    <div className="flex flex-col justify-between">
+                      <div className="flex flex-col">
+                        <h4 className="sm:text-lg text-sm font-medium transition-all transition-discrete">
+                          {item.productId.product_name}
+                        </h4>
+                        <p>8 / M</p>
+                      </div>
+                      <p className="sm:text-lg text-sm font-medium transition-all transition-discrete">
+                        Rp200.000
+                      </p>
+                    </div>
                   </div>
-                  <p className="sm:text-lg text-sm font-medium transition-all transition-discrete">
-                    Rp200.000
-                  </p>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <p className="font-medium sm:text-lg text-sm text-red-600">
-                  Remove
-                </p>
-                <div className="flex gap-2 font-medium sm:text-base text-sm transition-all transiiton-discrete items-center">
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    -
-                  </p>
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    1
-                  </p>
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    +
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3  w-full p-4 rounded-md bg-white mb-2">
-              <div className="flex gap-4">
-                <img
-                  src="https://images.pexels.com/photos/1868566/pexels-photo-1868566.jpeg"
-                  alt=""
-                  className="sm:w-30 w-20 aspect-square object-cover"
-                />
-                <div className="flex flex-col justify-between">
-                  <div className="flex flex-col">
-                    <h4 className="sm:text-lg text-sm font-medium transition-all transition-discrete">
-                      White Crewneck
-                    </h4>
-                    <p>8 / M</p>
+                  <div className="flex justify-between">
+                    <p className="font-medium sm:text-lg text-sm text-red-600">
+                      Remove
+                    </p>
+                    <div className="flex gap-2 font-medium sm:text-base text-sm transition-all transiiton-discrete items-center">
+                      <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
+                        -
+                      </p>
+                      <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
+                        1
+                      </p>
+                      <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
+                        +
+                      </p>
+                    </div>
                   </div>
-                  <p className="sm:text-lg text-sm font-medium transition-all transition-discrete">
-                    Rp200.000
-                  </p>
                 </div>
-              </div>
-              <div className="flex justify-between">
-                <p className="font-medium sm:text-lg text-sm text-red-600">
-                  Remove
-                </p>
-                <div className="flex gap-2 font-medium sm:text-base text-sm transition-all transiiton-discrete items-center">
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    -
-                  </p>
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    1
-                  </p>
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    +
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3  w-full p-4 rounded-md bg-white mb-2">
-              <div className="flex gap-4">
-                <img
-                  src="https://images.pexels.com/photos/1868566/pexels-photo-1868566.jpeg"
-                  alt=""
-                  className="sm:w-30 w-20 aspect-square object-cover"
-                />
-                <div className="flex flex-col justify-between">
-                  <div className="flex flex-col">
-                    <h4 className="sm:text-lg text-sm font-medium transition-all transition-discrete">
-                      White Crewneck
-                    </h4>
-                    <p>8 / M</p>
-                  </div>
-                  <p className="sm:text-lg text-sm font-medium transition-all transition-discrete">
-                    Rp200.000
-                  </p>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <p className="font-medium sm:text-lg text-sm text-red-600">
-                  Remove
-                </p>
-                <div className="flex gap-2 font-medium sm:text-base text-sm transition-all transiiton-discrete items-center">
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    -
-                  </p>
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    1
-                  </p>
-                  <p className="border border-slate-200 sm:py-1 sm:px-3 px-1 ">
-                    +
-                  </p>
-                </div>
-              </div>
-            </div>
+              ))
+            )}
           </div>
         </div>
         <DetailSummary className="col-span-3" />

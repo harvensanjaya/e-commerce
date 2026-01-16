@@ -1,9 +1,9 @@
-import React, { useState, type HtmlHTMLAttributes } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { InputForm } from "../Elements/Input";
-import Button from "../Elements/Button";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { registerThunk } from "../../redux/auth/authThunks";
+import Button from "../Elements/Button";
+import { InputForm } from "../Elements/Input";
 import SuccessRegisModal from "./SuccessRegisModal";
 
 interface RegisterForm {
@@ -158,10 +158,7 @@ function FormRegister() {
         </form>
       </div>
 
-      <SuccessRegisModal
-        isOpen={showModal}
-        onConfirm={() => setShowModal(false)}
-      />
+      <SuccessRegisModal isOpen={showModal} />
     </>
   );
 }
