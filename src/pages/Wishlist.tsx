@@ -45,7 +45,11 @@ const Wishlist = () => {
                 ? `${product.description.substring(0, 50)}...`
                 : ""}
             </CardProduct.Body>
-            <CardProduct.Footer price={product.price} product={product} />
+            <CardProduct.Footer
+              price={product.price}
+              product={product}
+              showLike={false}
+            />
           </CardProduct>
         ))}
       </div>
